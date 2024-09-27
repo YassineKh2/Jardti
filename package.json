@@ -1,0 +1,48 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "axios": "^1.1.2",
+        "laravel-vite-plugin": "^0.7.2",
+        "lodash": "^4.17.19",
+        "postcss": "^8.1.14",
+        "sass": "^1.79.3",
+        "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "@popperjs/core": "^2.11.8",
+        "apexcharts": "^3.49.0",
+        "bootstrap": "^5.3.3",
+        "datatables.net": "^1.11.4",
+        "datatables.net-bs5": "^1.11.4",
+        "datatables.net-buttons": "^2.2.2",
+        "datatables.net-buttons-bs5": "^2.2.2",
+        "datatables.net-keytable": "^2.6.4",
+        "datatables.net-keytable-bs5": "^2.6.4",
+        "datatables.net-responsive": "^2.2.9",
+        "datatables.net-responsive-bs5": "^2.2.9",
+        "datatables.net-select": "^1.3.4",
+        "datatables.net-select-bs5": "^1.3.4",
+        "dropzone": "^5.8.1",
+        "feather-icons": "^4.29.1",
+        "flatpickr": "^4.6.9",
+        "fullcalendar": "^6.1.14",
+        "glightbox": "^3.3.0",
+        "gmaps": "^0.4.25",
+        "gumshoejs": "^5.1.2",
+        "jquery": "3.7.1",
+        "jquery-countdown": "^2.2.0",
+        "jquery.counterup": "^2.1.0",
+        "jsvectormap": "^1.6.0",
+        "moment": "2.22.2",
+        "node-waves": "^0.7.6",
+        "peity": "^3.3.0",
+        "quill": "^1.3.7",
+        "simplebar": "^5.3.0",
+        "swiper": "^8.0.7",
+        "waypoints": "^4.0.1"
+    }
+}
