@@ -18,9 +18,10 @@
         <!-- Hoverable Rows -->
         <div class="">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title mb-0">Hoverable Table</h5>
-                </div><!-- end card header -->
+                    <a href="categories/create"><i data-feather="plus-circle" style="height: 20px; width: 20px; color:gray;"></i></a>
+                </div>
 
                 <div class="card-body">
                     <div class="table-responsive">
@@ -29,33 +30,25 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Description</th>
                                 <th scope="col">Picture</th>
-                                <th scope="col">Items</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Warren Jackson</td>
-                                <td>Jackson</td>
-                                <td>336-508-2157</td>
-                                <td>336-508-2157</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Amy</td>
-                                <td>Cunha</td>
-                                <td>646-473-2057</td>
-                                <td>646-473-2057</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Steven</td>
-                                <td>Loch</td>
-                                <td>281-308-0793</td>
-                                <td>281-308-0793</td>
-                            </tr>
+                            @for ($i = 0; $i < count($Categories); $i++)
+                                <tr>
+                                    <th scope="row">{{$i}}</th>
+                                    <td>{{$Categories[$i]['name']}}</td>
+                                    <td>{{$Categories[$i]['description']}}</td>
+                                    <td><img src="{{$Categories[$i]['picture']}}" /></td>
+                                    <td>
+                                        <i data-feather="eye"  style="height: 20px; width: 20px;"></i>
+                                        <i data-feather="edit"  style="height: 20px; width: 20px;"></i>
+                                        <i data-feather="trash"  style="height: 20px; width: 20px;"></i>
+                                    </td>
+                                </tr>
+                            @endfor
                             </tbody>
                         </table>
                     </div>

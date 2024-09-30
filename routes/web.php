@@ -23,6 +23,7 @@ Route::get('/', function () {
 
 Route::get('/shop/categories', [CategoryController::class, 'index']);
 
+Route::get('/shop/categories/create', [CategoryController::class, 'create']);
 
 // --------------------- Shop Routes --------------------- //
 
