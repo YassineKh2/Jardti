@@ -21,9 +21,7 @@ Route::get('/', function () {
 
 // --------------------- Shop Routes --------------------- //
 
-Route::get('/shop/categories', [CategoryController::class, 'index']);
-
-Route::get('/shop/categories/create', [CategoryController::class, 'create']);
+Route::resource('/shop/categories', CategoryController::class);
 
 // --------------------- Shop Routes --------------------- //
 

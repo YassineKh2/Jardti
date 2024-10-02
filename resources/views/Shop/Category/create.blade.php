@@ -26,36 +26,45 @@
                 </div><!-- end card header -->
 
                 <div class="card-body">
-                    <form>
-                    <div class="row">
-                        <div class="col-lg-6">
+                    <form action="{{route('categories.store')}}" method="POST" id="categoryform">
+                        {{ csrf_field() }}
+                        <div class="row">
+                            <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="simpleinput" class="form-label">Name</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" id="name" name="name" class="form-control">
                                 </div>
-                            <div class="mb-3">
-                                <label for="formFile" class="form-label">Image</label>
-                                <input class="form-control" type="file" id="formFile">
+                                @error('nom')
+                                <h1>u suck</h1>
+                                @enderror
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input class="form-control" type="file" id="image" name="image">
+                                </div>
+                                @error('image')
+                                <h1>u suck</h1>
+                                @enderror
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="example-textarea" class="form-label">Description</label>
-                                <textarea class="form-control" id="example-textarea" rows="5" spellcheck="false"></textarea>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="5"
+                                              spellcheck="false"></textarea>
+                                </div>
                             </div>
-                        </div>
+                            @error('description')
+                            <h1>u suck</h1>
+                            @enderror
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
-                    </div>
                 </div>
-
             </div>
+
         </div>
     </div>
-
-
+    </div>
 
 @endsection

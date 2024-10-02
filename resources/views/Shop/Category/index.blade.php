@@ -45,7 +45,8 @@
                                     <td>
                                         <i data-feather="eye"  style="height: 20px; width: 20px;"></i>
                                         <i data-feather="edit"  style="height: 20px; width: 20px;"></i>
-                                        <i data-feather="trash"  style="height: 20px; width: 20px;"></i>
+                                        <i onclick="deleteCategory({{ $Categories[$i]['id'] }})" data-feather="trash"  style="height: 20px; width: 20px;"></i>
+
                                     </td>
                                 </tr>
                             @endfor
@@ -60,4 +61,33 @@
 
 
     </div>
+
+    @section('js')
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            function deleteCategory(categoryId) {
+                if (confirm('Are you sure you want to delete this category?')) {
+                    $.ajax({
+                        url: '/categories/' + categoryId,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            alert('Category deleted successfully');
+                            location.reload();
+                        },
+                        error: function(error) {
+                            alert('Failed to delete the category.');
+                        }
+                    });
+                }
+            }
+        </script>
+    @endsection
+
+
 @endsection
+
+
