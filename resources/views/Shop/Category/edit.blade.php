@@ -26,15 +26,16 @@
                 </div><!-- end card header -->
 
                 <div class="card-body">
-                    <form action="{{route('categories.store')}}"  enctype="multipart/form-data" method="POST" id="categoryform">
+                    <form action="{{route('categories.update',$category['id'])}}" method="POST" enctype="multipart/form-data" id="Editcategoryform">
                         {{ csrf_field() }}
+                        @method('PUT')
                         <div class="row">
 
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label for="validationServerUsername" class="form-label">Name</label>
                                     <div class="input-group has-validation">
-                                        <input type="text" name="name" id="name" class="form-control  @error('name') is-invalid @enderror" id="validationServerUsername" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback">
+                                        <input type="text" value="{{$category['name']}}" name="name" id="name" class="form-control  @error('name') is-invalid @enderror" id="validationServerUsername" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback">
                                         @error('name')
                                         <div id="validationServerUsernameFeedback" class="invalid-feedback">
                                             {{$message}}
@@ -47,6 +48,7 @@
                                     <label for="validationServerImage" class="form-label">Image</label>
                                     <div class="input-group has-validation">
                                         <input id='validationServerImage' name="image" class="form-control @error('image') is-invalid @enderror" type="file"  aria-describedby="validationServerUsernameFeedback">
+                                        <img  class="ms-2 img-fluid" style="max-width: 100px; height: auto;" src="{{$category['image']}}"/>
                                         @error('image')
                                         <div id="validationServerImage" class="invalid-feedback">
                                             {{$message}}
@@ -61,7 +63,7 @@
                                     <label for="description" class="form-label">Description</label>
                                     <div class="input-group has-validation">
                                     <textarea class="form-control" id="description" aria-describedby="validationServerDescriptionFeedback" name="description" rows="5"
-                                              spellcheck="false"></textarea>
+                                              spellcheck="false">{{$category['description']}}</textarea>
                                     </div>
                                     @error('description')
                                     <div id="validationServerDescriptionFeedback" class="text-danger">

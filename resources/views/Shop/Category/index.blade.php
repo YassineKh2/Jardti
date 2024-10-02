@@ -41,14 +41,14 @@
                                     <th scope="row">{{$i}}</th>
                                     <td>{{$Categories[$i]['name']}}</td>
                                     <td>{{$Categories[$i]['description']}}</td>
-                                    <td><img src="{{$Categories[$i]['picture']}}" /></td>
-                                    <td class="d-flex justify-content-center align-items-center gap-1">
-                                        <i data-feather="eye"  style="height: 20px; width: 20px;"></i>
-                                        <i data-feather="edit"  style="height: 20px; width: 20px;"></i>
+                                    <td><img  class="img-fluid" style="max-width: 100px; height: auto;" src="{{asset($Categories[$i]['image'])}}" /></td>
+                                    <td class="d-flex py-5 justify-content-center align-items-center gap-1">
+                                        <i class="text-primary" data-feather="eye"  style="height: 20px; width: 20px;"></i>
+                                        <a class="text-success" href="{{route('categories.edit', $Categories[$i]['id'])}}"><i data-feather="edit"  style="height: 20px; width: 20px;"></i></a>
                                         <form action="{{ route('categories.destroy', $Categories[$i]['id']) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="border-0"><i data-feather="trash"  style="height: 20px; width: 20px;"></i></button>
+                                            <button type="submit" class="border-0 text-danger" style="background: none; padding: 0; cursor: pointer;"><i data-feather="trash"  style="height: 20px; width: 20px;"></i></button>
                                         </form>
                                     </td>
                                 </tr>
