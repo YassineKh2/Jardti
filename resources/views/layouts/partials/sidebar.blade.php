@@ -107,7 +107,8 @@
                     </div>
                 </li>
 
-                <li>
+              
+                  <li>
                     <a href="#sidebarExpages" data-bs-toggle="collapse">
                         <i data-feather="file-text"></i>
                         <span> Utility </span>
@@ -146,6 +147,12 @@
                     </div>
                 </li>
 
+                <li>
+                    <a href="{{ route('events') }}" class="tp-link">
+                        <i data-feather="calendar"></i>
+                        <span> Events </span>
+                    </a>
+                </li>
                 <li>
                     <a href="#" class="tp-link">
                         <i data-feather="calendar"></i>
