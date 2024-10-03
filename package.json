@@ -37,6 +37,7 @@
         "jquery-countdown": "^2.2.0",
         "jquery.counterup": "^2.1.0",
         "jsvectormap": "^1.6.0",
+        "material-design-icons": "^3.0.1",
         "moment": "2.22.2",
         "node-waves": "^0.7.6",
         "peity": "^3.3.0",

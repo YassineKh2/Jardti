@@ -45,6 +45,14 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="/products">
+                        <i data-feather="archive"></i>
+                        <span> Products </span>
+
+                    </a>
+
+                </li>
 
                 <li class="menu-title">Pages</li>
 

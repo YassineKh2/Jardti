@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+// Route::get('/', function () {
+//     return redirect()->route('products.index');
+// });
+
+// Routes pour la gestion des produits (CRUD complet avec ProductController)
+Route::resource('products', ProductController::class);
+Route::resource('orders', OrderController::class);
 
