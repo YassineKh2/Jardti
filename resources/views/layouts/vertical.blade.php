@@ -4,6 +4,7 @@
     @include('layouts.partials/title-meta', ['title' => $title])
     @yield('css')
     @include('layouts.partials/head-css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body data-menu-color="light" data-sidebar="default" @yield('body') >

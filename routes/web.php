@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\PointsController;
-
+use \App\Http\Controllers\CourseCategoriesController;
+use \App\Http\Controllers\CoursesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +48,7 @@ Route::resource('/back/shop/categories', CategoryController::class);
 // --------------------- Shop Routes --------------------- //
 
 
+// Resource route for Course Categories
 
+Route::resource('/back/course-categories', CourseCategoriesController::class);
+Route::resource('/back/courses', CoursesController::class);
