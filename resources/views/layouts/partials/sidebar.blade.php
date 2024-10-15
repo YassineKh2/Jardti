@@ -146,15 +146,31 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+    <a href="#sidebarEvents" data-bs-toggle="collapse">
+        <i data-feather="calendar"></i>
+        <span> Events </span>
+        <span class="menu-arrow"></span>
+    </a>
+    <div class="collapse" id="sidebarEvents">
+        <ul class="nav-second-level">
+            <li>
+                <a class="tp-link" href="{{ route('events') }}">All Events</a>
+            </li>
+            <li>
+                <a class="tp-link" href="{{ route('events.create') }}">Create Event</a>
+            </li>
+           
+            <li>
+            <a class="tp-link" href="{{ route('categories') }}">Event Categories</a>
+            </li>
+        </ul>
+    </div>
+</li>
 
+                
                 <li>
-                    <a href="{{ route('events') }}" class="tp-link">
-                        <i data-feather="calendar"></i>
-                        <span> Events </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="tp-link">
+                    <a href="{{ route('calendar') }}" class="tp-link">
                         <i data-feather="calendar"></i>
                         <span> Calendar </span>
                     </a>

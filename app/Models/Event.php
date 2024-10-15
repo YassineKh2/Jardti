@@ -19,6 +19,12 @@ class Event extends Model
         'capacity',     
         'price',         
         'image_path',    
-        'has_delay',     
+        'has_delay', 
+        'category_id',  // Foreign key to EventCategory
+
     ];
+    public function category()
+    {
+        return $this->belongsTo(EventCategory::class, 'category_id');
+    }
 }

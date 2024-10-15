@@ -48,7 +48,35 @@
                             <!-- Location -->
                             <div class="mb-3">
                                 <label class="form-label" for="location">Location</label>
-                                <input type="text" class="form-control" id="location" name="location" value="{{ old('location') }}">
+                                <select class="form-control" id="location" name="location">
+                                    <option value="" disabled selected>Select Region</option>
+                                    <option value="Carthage">Carthage</option>
+                                    <option value="La Marsa">La Marsa</option>
+                                    <option value="Le Kram">Le Kram</option>
+                                    <option value="Gammarth">Gammarth</option>
+                                    <option value="Sidi Bou Said">Sidi Bou Said</option>
+                                    <option value="Lac 1">Lac 1</option>
+                                    <option value="Lac 2">Lac 2</option>
+                                    <option value="Bardo">Bardo</option>
+                                    <option value="Manouba">Manouba</option>
+                                    <option value="Ben Arous">Ben Arous</option>
+                                    <option value="El Mourouj">El Mourouj</option>
+                                    <option value="Menzah">Menzah</option>
+                                    <option value="Ariana">Ariana</option>
+                                    <option value="La Goulette">La Goulette</option>
+                                    <!-- Add other regions as necessary -->
+                                </select>
+                            </div>
+
+                            <!-- Category Selection -->
+                            <div class="mb-3">
+                                <label class="form-label" for="category_id">Event Category</label>
+                                <select class="form-control" id="category_id" name="category_id" required>
+                                    <option value="" disabled selected>Select Category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <!-- Capacity -->
@@ -85,7 +113,10 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Create Event</button>
+                    <!-- Align button to the right -->
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Create Event</button>
+                    </div>
                 </form>
             </div>
         </div>

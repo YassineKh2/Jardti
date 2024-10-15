@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\EventCategory;
 
 class EventController extends Controller
 {
@@ -25,7 +26,8 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('Events.create');
+        $categories = EventCategory::all(); // Get all categories
+        return view('Events.create', compact('categories')); 
     }
 
     /**
@@ -53,7 +55,7 @@ class EventController extends Controller
             $imagePath = null;
         }
     
-        // Create an Event instance
+        
         $event = new Event();
         $event->name = $request->name;
         $event->description = $request->description;
@@ -64,7 +66,8 @@ class EventController extends Controller
         $event->price = $request->price;
         $event->image_path = $imagePath;
         $event->has_delay = $request->has('has_delay') ? true : false; // For the delay attribute
-    
+        $event->category_id = $request->category_id; // Save category_id
+
         $event->save();
     
         return redirect()->route('events')->with('success', 'Event created successfully!');
@@ -92,8 +95,8 @@ class EventController extends Controller
     public function edit($id)
     {
         $event = Event::findOrFail($id);
-        
-        return view('Events.edit', compact('event'));
+        $categories = EventCategory::all(); // Get all categories
+        return view('Events.edit', compact('event', 'categories')); 
     }
 
     /**
@@ -109,29 +112,26 @@ class EventController extends Controller
             'name' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for image
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', 
         ]);
 
-        // Find the event by ID
+     
         $event = Event::findOrFail($id);
 
-        // If a new image is uploaded, store it
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('images/Events'), $imageName);
             $imagePath = 'images/Events/' . $imageName;
 
-            // Delete the old image (optional)
             if ($event->image_path) {
                 if (file_exists(public_path($event->image_path))) {
                     unlink(public_path($event->image_path));
                 }
             }
 
-            $event->image_path = $imagePath; // Update the image path in the event
+            $event->image_path = $imagePath; 
         }
 
-        // Update the event with the request data
         $event->name = $request->name;
         $event->description = $request->description;
         $event->start_date = $request->start_date;
@@ -139,9 +139,10 @@ class EventController extends Controller
         $event->location = $request->location;
         $event->capacity = $request->capacity;
         $event->price = $request->price;
-        $event->has_delay = $request->has('has_delay') ? true : false; // For the delay attribute
+        $event->has_delay = $request->has('has_delay') ? true : false; 
+        $event->category_id = $request->category_id; // Update category_id
 
-        // Save the changes
+       
         $event->save();
 
         return redirect()->route('events')->with('success', 'Event updated successfully!');
@@ -165,4 +166,11 @@ class EventController extends Controller
 
     return redirect()->route('events')->with('success', 'Event deleted successfully!');
     }
+
+    public function showCalendar()
+{
+    $events = Event::select('name as title', 'start_date as start', 'end_date as end')->get();
+    return view('calendar', compact('events'));
+}
+
 }

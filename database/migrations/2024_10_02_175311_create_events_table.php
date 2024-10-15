@@ -24,6 +24,8 @@ return new class extends Migration
             $table->decimal('price', 8, 2)->nullable(); 
             $table->string('image_path')->nullable(); 
             $table->boolean('has_delay')->default(false); 
+            $table->foreignId('category_id')->constrained('event_categories')->onDelete('cascade');
+
     });
 }
 

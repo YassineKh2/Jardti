@@ -44,13 +44,42 @@
                             <!-- Description -->
                             <div class="mb-3">
                                 <label class="form-label" for="description">Event Description</label>
-                                <textarea class="form-control" id="description" name="description">{{ old('description', $event->description) }}</textarea>
+                                <textarea class="form-control" id="description" name="description">{{ old('description', $event->description) }}"></textarea>
                             </div>
 
-                            <!-- Location -->
+                            <!-- Location (Dropdown with regions of Tunis) -->
                             <div class="mb-3">
                                 <label class="form-label" for="location">Location</label>
-                                <input type="text" class="form-control" id="location" name="location" value="{{ old('location', $event->location) }}">
+                                <select class="form-control" id="location" name="location" required>
+                                    <option value="" disabled>Select Region</option>
+                                    <option value="Carthage" {{ old('location', $event->location) == 'Carthage' ? 'selected' : '' }}>Carthage</option>
+                                    <option value="La Marsa" {{ old('location', $event->location) == 'La Marsa' ? 'selected' : '' }}>La Marsa</option>
+                                    <option value="Le Kram" {{ old('location', $event->location) == 'Le Kram' ? 'selected' : '' }}>Le Kram</option>
+                                    <option value="Gammarth" {{ old('location', $event->location) == 'Gammarth' ? 'selected' : '' }}>Gammarth</option>
+                                    <option value="Sidi Bou Said" {{ old('location', $event->location) == 'Sidi Bou Said' ? 'selected' : '' }}>Sidi Bou Said</option>
+                                    <option value="Lac 1" {{ old('location', $event->location) == 'Lac 1' ? 'selected' : '' }}>Lac 1</option>
+                                    <option value="Lac 2" {{ old('location', $event->location) == 'Lac 2' ? 'selected' : '' }}>Lac 2</option>
+                                    <option value="Bardo" {{ old('location', $event->location) == 'Bardo' ? 'selected' : '' }}>Bardo</option>
+                                    <option value="Manouba" {{ old('location', $event->location) == 'Manouba' ? 'selected' : '' }}>Manouba</option>
+                                    <option value="Ben Arous" {{ old('location', $event->location) == 'Ben Arous' ? 'selected' : '' }}>Ben Arous</option>
+                                    <option value="El Mourouj" {{ old('location', $event->location) == 'El Mourouj' ? 'selected' : '' }}>El Mourouj</option>
+                                    <option value="Menzah" {{ old('location', $event->location) == 'Menzah' ? 'selected' : '' }}>Menzah</option>
+                                    <option value="Ariana" {{ old('location', $event->location) == 'Ariana' ? 'selected' : '' }}>Ariana</option>
+                                    <option value="La Goulette" {{ old('location', $event->location) == 'La Goulette' ? 'selected' : '' }}>La Goulette</option>
+                                </select>
+                            </div>
+
+                            <!-- Category Selection -->
+                            <div class="mb-3">
+                                <label class="form-label" for="category_id">Event Category</label>
+                                <select class="form-control" id="category_id" name="category_id" required>
+                                    <option value="" disabled>Select Category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id', $event->category_id) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <!-- Capacity -->
@@ -90,7 +119,10 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Update Event</button>
+                    <!-- Align the button to the right -->
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Update Event</button>
+                    </div>
                 </form>
             </div>
         </div>

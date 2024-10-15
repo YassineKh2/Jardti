@@ -11,15 +11,15 @@
 
         /* Ensures that the image fills the entire available space */
         .gallery-image {
-            height: 250px; /* You can adjust the height if needed */
+            height: 250px; /* Adjust height as needed */
             width: 100%;
-            overflow: hidden; /* Ensure content outside the bounds doesn't show */
+            overflow: hidden;
         }
 
         .gallery-image img {
             height: 100%;
             width: 100%;
-            object-fit: cover; /* Ensures image covers the entire space */
+            object-fit: cover; /* Ensure image covers the entire space */
             transition: transform 0.3s ease; /* Add smooth transition for hover effect */
         }
 
@@ -102,7 +102,6 @@
 
 <!-- Create Event Button Below Breadcrumb -->
 <div class="d-flex justify-content-end mb-3">
-<a href="{{ route('events.create') }}" class="btn btn-primary ms-2">Create Event</a>
 </div>
 
 <div class="row">
@@ -190,6 +189,14 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('delete-form-' + eventId).submit();
+
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Your event has been deleted.',
+                        icon: 'success',
+                        timer: 2000, // Optional: automatically close after 2 seconds
+                        showConfirmButton: false
+                    });
                 }
             });
         }
