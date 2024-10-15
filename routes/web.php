@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\CategoryController;
+use \App\Http\Controllers\PointsController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +16,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+// ---------------------  General Routes --------------------- //
+
+
+
 Route::get('/', function () {
+    return view('indexFront');
+});
+
+
+
+Route::get('/back', function () {
     return view('index');
 });
+
+
+// ---------------------  General Routes --------------------- //
+
+
+
+
+// ---------------------  Shop Routes --------------------- //
+
+Route::resource('/mypoints', PointsController::class);
+
+Route::resource('/back/shop/categories', CategoryController::class);
+
+// --------------------- Shop Routes --------------------- //
+
+
 
