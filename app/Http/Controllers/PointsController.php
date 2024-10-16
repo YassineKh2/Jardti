@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 class PointsController extends Controller
@@ -13,7 +15,10 @@ class PointsController extends Controller
      */
     public function index()
     {
-        return view('Shop.Frontend.index');
+        $Categories = Category::all();
+        $Items = Item::all();
+        $Active = 0;
+        return view('Shop.Frontend.index',compact('Categories','Items','Active'));
 
     }
 
@@ -42,11 +47,17 @@ class PointsController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show($id)
     {
-        //
+        if($id==0){
+            return redirect()->route('mypoints.index');
+        }
+        $Items = Item::all()->where('category_id',$id);
+        $Categories = Category::all();
+        $Active = $id;
+        return view('Shop.Frontend.index',compact('Categories','Items','Active'));
     }
 
     /**
@@ -82,4 +93,6 @@ class PointsController extends Controller
     {
         //
     }
+
+
 }

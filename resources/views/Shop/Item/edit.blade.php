@@ -107,7 +107,7 @@
                                     </div>
                                     @enderror
                                 </div>
-                                <img  class="ms-2 img-fluid" style="max-width: 100px; height: auto;" src="{{$item['image']}}"/>
+                                <img  class="mt-2 rounded img-fluid" style="max-width: 100px; height: auto;" src="{{$item['image']}}"/>
                             </div>
 
                         </div>
