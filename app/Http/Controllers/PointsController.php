@@ -103,7 +103,8 @@ class PointsController extends Controller
         if($id==0){
             return redirect()->route('mypoints.index');
         }
-        $Items = Item::all()->where('category_id',$id);
+        $Items = Item::all()->where('category_id',$id)->toArray();
+        $Items = array_values($Items);
         $Categories = Category::all();
         $Active = $id;
         return view('Shop.Frontend.index',compact('Categories','Items','Active'));
