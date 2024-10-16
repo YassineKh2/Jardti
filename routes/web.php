@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\PointsController;
+use \App\Http\Controllers\ItemController;
 
 
 /*
@@ -38,13 +39,16 @@ Route::get('/back', function () {
 
 
 
-// ---------------------  Shop Routes --------------------- //
+// --------------------- Gamification Shop Routes --------------------- //
 
 Route::resource('/mypoints', PointsController::class);
 
 Route::resource('/back/shop/categories', CategoryController::class);
 
-// --------------------- Shop Routes --------------------- //
+
+Route::resource('/back/shop/items', ItemController::class);
+
+// --------------------- Gamification Shop Routes --------------------- //
 
 
 
