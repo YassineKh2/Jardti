@@ -42,6 +42,7 @@ Route::get('/back', function () {
 // --------------------- Gamification Shop Routes --------------------- //
 
 Route::resource('/mypoints', PointsController::class);
+Route::get('/mypoints/filter/{id}', [PointsController::class,'FilterByCategory'])->name('mypoints.filter');
 
 Route::resource('/back/shop/categories', CategoryController::class);
 

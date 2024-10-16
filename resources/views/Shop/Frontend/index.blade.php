@@ -98,9 +98,9 @@
                 <section id="selling-products" class="col-md-9 product-store">
                     <div class="container">
                         <ul class="tabs list-unstyled">
-                            <a href="{{route('mypoints.show', 0)}}" data-tab-target="#all"  class=" @if($Active == 0) active @endif tab" >All</a>
+                            <a href="{{route('mypoints.filter', 0)}}" data-tab-target="#all"  class=" @if($Active == 0) active @endif tab" >All</a>
                             @for ($i = 0; $i < count($Categories); $i++)
-                                <a href="{{route('mypoints.show', $Categories[$i]['id'])}}" data-tab-target="#shoes"  class=" @if($Active == $Categories[$i]['id']) active @endif  tab" >{{$Categories[$i]['name']}}</a>
+                                <a href="{{route('mypoints.filter', $Categories[$i]['id'])}}" data-tab-target="#shoes"  class=" @if($Active == $Categories[$i]['id']) active @endif  tab" >{{$Categories[$i]['name']}}</a>
                             @endfor
 
                         </ul>
@@ -131,7 +131,7 @@
                                         </div>
                                         <div class="product-detail">
                                             <h3 class="product-title">
-                                                <a href="single-product.html">{{$Items[$i]['name']}}</a>
+                                                <a href="{{route('mypoints.show', $Items[$i]['id'])}}">{{$Items[$i]['name']}}</a>
                                             </h3>
                                             <div class="text-primary"><text class="item-price">{{$Items[$i]['price']}}</text>ₚₜₛ</div>
                                         </div>
@@ -156,7 +156,7 @@
                             </nav>
 
                         </div>
-
+                    </div>
                 </section>
 
                 <aside class="col-md-3">
@@ -207,22 +207,22 @@
                             </ul>
                         </div>
                         <div class="widgets widget-price-filter">
-                            <h5 class="widget-title">Filter By Price</h5>
+                            <h5 class="widget-title">Filter By Points</h5>
                             <ul class="product-tags sidebar-list list-unstyled">
                                 <li class="tags-item">
-                                    <a href="">Less than $10</a>
+                                    <a href="">Less than 10ₚₜₛ</a>
                                 </li>
                                 <li class="tags-item">
-                                    <a href="">$10- $20</a>
+                                    <a href="">10ₚₜₛ- 20ₚₜₛ</a>
                                 </li>
                                 <li class="tags-item">
-                                    <a href="">$20- $30</a>
+                                    <a href="">20ₚₜₛ- 30ₚₜₛ</a>
                                 </li>
                                 <li class="tags-item">
-                                    <a href="">$30- $40</a>
+                                    <a href="">30ₚₜₛ- 40ₚₜₛ</a>
                                 </li>
                                 <li class="tags-item">
-                                    <a href="">$40- $50</a>
+                                    <a href="">40ₚₜₛ- 50ₚₜₛ</a>
                                 </li>
                             </ul>
                         </div>

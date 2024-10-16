@@ -51,13 +51,11 @@ class PointsController extends Controller
      */
     public function show($id)
     {
-        if($id==0){
-            return redirect()->route('mypoints.index');
-        }
-        $Items = Item::all()->where('category_id',$id);
-        $Categories = Category::all();
-        $Active = $id;
-        return view('Shop.Frontend.index',compact('Categories','Items','Active'));
+        $item = Item::all()->find($id);
+        $category = Category::all()->find($item->category_id);
+        $item->category_name = $category->name;
+
+        return view('Shop.Frontend.show',compact('item'));
     }
 
     /**
@@ -92,6 +90,23 @@ class PointsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function FilterByCategory($id)
+    {
+        if($id==0){
+            return redirect()->route('mypoints.index');
+        }
+        $Items = Item::all()->where('category_id',$id);
+        $Categories = Category::all();
+        $Active = $id;
+        return view('Shop.Frontend.index',compact('Categories','Items','Active'));
     }
 
 
