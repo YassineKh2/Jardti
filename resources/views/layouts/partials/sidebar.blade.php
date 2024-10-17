@@ -62,8 +62,6 @@
 
                 </li>
 
-                <li class="menu-title">Pages</li>
-
                 <li>
                     <a href="#sidebarAuth" data-bs-toggle="collapse">
                         <i data-feather="users"></i>
@@ -168,6 +166,26 @@
                         <span> Calendar </span>
                     </a>
                 </li>
+
+
+                <li>
+                    <a href="#sidebarShop" data-bs-toggle="collapse">
+                        <i data-feather="shopping-cart"></i>
+                        <span> Shop </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarShop">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="/back/shop/categories" class="tp-link">Categories</a>
+                            </li>
+                            <li>
+                                <a href="/back/shop/items" class="tp-link">Items</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
 
                 <li class="menu-title mt-2">General</li>
 

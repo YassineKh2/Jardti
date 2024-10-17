@@ -3,6 +3,10 @@
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\CategoryController;
+use \App\Http\Controllers\PointsController;
+use \App\Http\Controllers\ItemController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +19,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+// ---------------------  General Routes --------------------- //
+
+
+
 // Route::get('/', function () {
 //     return redirect()->route('products.index');
 // });
@@ -23,4 +33,33 @@ use Illuminate\Support\Facades\Route;
 Route::resource('products', ProductController::class);
 Route::resource('orders', OrderController::class);
  Route::get('/Client/ProductsList', [ProductController::class, 'productsList']);
+Route::get('/', function () {
+    return view('indexFront');
+});
+
+
+
+Route::get('/back', function () {
+    return view('index');
+});
+
+
+// ---------------------  General Routes --------------------- //
+
+
+
+
+// --------------------- Gamification Shop Routes --------------------- //
+
+Route::resource('/mypoints', PointsController::class);
+Route::get('/mypoints/filter/{id}', [PointsController::class,'FilterByCategory'])->name('mypoints.filter');
+
+Route::resource('/back/shop/categories', CategoryController::class);
+
+
+Route::resource('/back/shop/items', ItemController::class);
+
+// --------------------- Gamification Shop Routes --------------------- //
+
+
 
