@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaskController;
+
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\PointsController;
 use \App\Http\Controllers\ItemController;
+
 
 
 /*
@@ -33,6 +36,10 @@ Route::get('/back', function () {
     return view('index');
 });
 
+// --------------------- tasks  Routes --------------------- //
+
+Route::resource('tasks', TaskController::class);
+
 
 // ---------------------  General Routes --------------------- //
 
@@ -50,6 +57,7 @@ Route::resource('/back/shop/categories', CategoryController::class);
 Route::resource('/back/shop/items', ItemController::class);
 
 // --------------------- Gamification Shop Routes --------------------- //
+
 
 
 
