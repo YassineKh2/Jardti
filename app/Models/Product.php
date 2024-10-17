@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'description',
@@ -15,9 +17,12 @@ class Product extends Model
         'category',
         'image',
     ];
+
+    // Many-to-many relationship with Order
     public function orders()
     {
-        return $this->belongsToMany(Order::class)->withPivot('quantity', 'price');
+        return $this->belongsToMany(Order::class)
+            ->withPivot('quantity', 'price') // Store quantity and price in the pivot table
+            ->withTimestamps();
     }
-
 }

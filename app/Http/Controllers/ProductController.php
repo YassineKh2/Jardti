@@ -18,6 +18,16 @@ class ProductController extends Controller
         $products = Product::all();
         return view('products.index', compact('products'));
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function productsList()
+    {
+        $products = Product::all();
+        return view('FrontOffice.productsList', compact('products'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -37,28 +47,26 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate request data
         $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
-            'category' => 'nullable|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add image validation
+            'category' => 'nullable|max:255','image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public'); // Store the image
-        }
+        // Handle image upload if exists
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('products', 'public') : null;
 
+        // Create a new product
         $product = new Product([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
             'quantity' => $request->quantity,
-            'category' => $request->category,
-            'image' => $imagePath, // Save the image path
-            'user_id' => auth()->id(),
+            'category' => $request->category,'image' => $imagePath, // Store the image path
+            // 'user_id' => auth()->id(), // Assign logged-in user as the product owner
         ]);
 
         $product->save();
@@ -99,33 +107,35 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Validate request data
         $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
-            'category' => 'nullable|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add image validation
+            'category' => 'nullable|max:255','image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
         ]);
 
+        // Find the product by ID
         $product = Product::findOrFail($id);
 
-        $imagePath = $product->image; // Keep the old image path
+        // Handle image update
+        $imagePath = $product->image; // Keep the current image path
         if ($request->hasFile('image')) {
             // Delete the old image if it exists
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
-            $imagePath = $request->file('image')->store('products', 'public'); // Store the new image
+            $imagePath = $request->file('image')->store('products', 'public'); // Store new image
         }
 
+        // Update the product
         $product->update([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
             'quantity' => $request->quantity,
-            'category' => $request->category,
-            'image' => $imagePath, // Save the image path
+            'category' => $request->category,'image' => $imagePath, // Store the updated image path
         ]);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
@@ -140,10 +150,13 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
-        // Delete the image if it exists
+
+        // Delete the associated image if it exists
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }
+
+        // Delete the product
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');

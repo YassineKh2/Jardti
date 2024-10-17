@@ -1,136 +1,125 @@
 <?php
 
+
+
 namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log; // Don't forget to import the Log facade
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Display a listing of the orders
     public function index()
     {
-        // Fetch all orders with related user and product
-        $orders = Order::with(['user', 'product'])->get();
+        $orders = Order::with(['user', 'products'])->get(); // Eager load user and products
         $users = User::all();
-
         $products = Product::all();
-        // Return view with orders data
+
         return view('orders.index', compact('orders', 'users', 'products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Show the form for creating a new order
     public function create()
     {
         $users = User::all();
         $products = Product::all();
+
         return view('orders.create', compact('users', 'products'));
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+    // Store a newly created order in storage
+
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        // Log the request data
+
+        $request->validate([
             'user_id' => 'required|exists:users,id',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'status' => 'required|in:pending,completed,cancelled',
+            'status' => 'required|string',
+            'products' => 'required|array',
+            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
         ]);
 
-        // Create the order (total_price will be calculated automatically)
-        $order = Order::create($validatedData);
+        $order = new Order();
+        $order->user_id = $request->user_id;
+        $order->status = $request->status;
+    
+        $order->save(); // Save the order first
+        // Attach products to the order with the quantity
+
+        foreach ($request->products as $product) {
+            $order->products()->attach($product['product_id'], [
+                'quantity' => $product['quantity'],
+                'price' => Product::find($product['product_id'])->price, // Assuming you want to store the current product price
+            ]);
+        }
 
         return redirect()->route('orders.index')->with('success', 'Order created successfully.');
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $order = Order::findOrFail($id);
-        return view('orders.show', compact('order'));
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    // Show the form for editing the specified order
+    public function edit(Order $order)
     {
-        $order = Order::findOrFail($id);
         $users = User::all();
         $products = Product::all();
+
         return view('orders.edit', compact('order', 'users', 'products'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    // Update the specified order in storage
+    public function update(Request $request, Order $order)
     {
-        // Validate request data
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'status' => 'required|in:pending,completed,cancelled',
+            'status' => 'required|string',
+            'products' => 'required|array',
+            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
         ]);
 
-        // Find the order by ID
-        $order = Order::findOrFail($id);
-
-        // Update the order fields
         $order->user_id = $request->user_id;
-        $order->product_id = $request->product_id;
-        $order->quantity = $request->quantity;
         $order->status = $request->status;
+        $order->save(); // Save the order first
 
-        // Recalculate total price using the product's price and quantity
-        $product = Product::findOrFail($request->product_id);
-        $order->total_price = $product->price * $order->quantity;
+        // Sync products with the order
+        $order->products()->sync([]);
+        foreach ($request->products as $product) {
+            $order->products()->attach($product['product_id'], [
+                'quantity' => $product['quantity'],
+                'price' => Product::find($product['product_id'])->price,
+            ]);
+        }
 
-        // Save the updated order
-        $order->save();
-
-        // Redirect to orders index with a success message
         return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    // Remove the specified order from storage
+    public function destroy(Order $order)
     {
-        $order = Order::findOrFail($id);
+        $order->products()->detach(); // Detach products before deleting the order
         $order->delete();
 
-        return redirect()->route('orders.index')->with('success', 'Commande supprimée avec succès.');
+        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
+    }
+
+    // Mark order as completed
+    public function complete(Order $order)
+    {
+        $order->markAsCompleted();
+
+        return redirect()->route('orders.index')->with('success', 'Order marked as completed.');
+    }
+
+    // Cancel the order
+    public function cancel(Order $order)
+    {
+        $order->cancel();
+
+        return redirect()->route('orders.index')->with('success', 'Order cancelled successfully.');
     }
 }

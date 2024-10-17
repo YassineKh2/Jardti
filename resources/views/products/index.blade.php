@@ -25,16 +25,16 @@
 </div>
 
 <!-- Add Product Button -->
-
+<div class="text-end mb-3">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+</div>
 
 <!-- Datatables -->
 <div class="row">
     <div class="col-12">
         <div class="card">
-
             <div class="card-header">
                 <h5 class="card-title mb-0">Basic Datatable</h5>
-
             </div><!-- end card header -->
 
             <div class="card-body">
@@ -55,19 +55,19 @@
                         <tr>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->description }}</td>
-                            <td>{{ $product->price }}</td>
-                            <td> <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width: 100px; height: auto;"></td>
+                            <td>${{ number_format($product->price, 2) }}</td>
+                            <td><img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width: 100px; height: auto;"></td>
                             <td>{{ $product->quantity }}</td>
                             <td>{{ $product->category }}</td>
                             <td>
                                 <a href="{{ route('products.edit', $product->id) }}" class="btn btn-white btn-sm">
-                                    <i data-feather="edit" class="text-warning"></i> <!-- Edit Icon -->
+                                    <i data-feather="edit" class="text-warning"></i>
                                 </a>
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-white btn-sm">
-                                        <i data-feather="trash" class="text-danger"></i> <!-- Delete Icon -->
+                                        <i data-feather="trash" class="text-danger"></i>
                                     </button>
                                 </form>
                             </td>
@@ -75,11 +75,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="text-center">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
-                </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -128,17 +124,13 @@
         </div>
     </div>
 </div>
-
-
-
-
 @endsection
 
 @section('script')
 @vite(['resources/js/pages/datatable.init.js'])
-<!-- <script>
+<script>
     $(document).ready(function() {
         $('#datatable').DataTable();
     });
-</script> -->
+</script>
 @endsection

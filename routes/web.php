@@ -22,4 +22,5 @@ use Illuminate\Support\Facades\Route;
 // Routes pour la gestion des produits (CRUD complet avec ProductController)
 Route::resource('products', ProductController::class);
 Route::resource('orders', OrderController::class);
+ Route::get('/Client/ProductsList', [ProductController::class, 'productsList']);
 

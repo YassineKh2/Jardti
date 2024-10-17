@@ -53,6 +53,14 @@
                     </a>
 
                 </li>
+                <li>
+                    <a href="/orders">
+                        <i data-feather="shopping-cart"></i>
+                        <span> Orders </span>
+
+                    </a>
+
+                </li>
 
                 <li class="menu-title">Pages</li>
 

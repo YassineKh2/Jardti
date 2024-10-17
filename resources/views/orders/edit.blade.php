@@ -38,23 +38,25 @@
                         </select>
                     </div>
 
-                    <!-- Product Selection -->
+                    <!-- Product Selection for Up to 3 Products -->
+                    @foreach ($order->products as $index => $product)
                     <div class="mb-3">
-                        <label for="product_id" class="form-label">Product</label>
-                        <select class="form-control" id="product_id" name="product_id" required>
-                            @foreach ($products as $product)
-                            <option value="{{ $product->id }}" {{ $order->product_id == $product->id ? 'selected' : '' }}>
-                                {{ $product->name }} - ${{ $product->price }}
+                        <label for="product_id_{{ $index }}" class="form-label">Product {{ $index + 1 }}</label>
+                        <select class="form-control" id="product_id_{{ $index }}" name="products[{{ $index }}][product_id]" required>
+                            <option value="" disabled>Select Product</option>
+                            @foreach ($products as $availableProduct)
+                            <option value="{{ $availableProduct->id }}" {{ $product->id == $availableProduct->id ? 'selected' : '' }}>
+                                {{ $availableProduct->name }} - ${{ number_format($availableProduct->price, 2) }}
                             </option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- Quantity -->
                     <div class="mb-3">
-                        <label for="quantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="quantity" name="quantity" value="{{ $order->quantity }}" min="1" required>
+                        <label for="quantity_{{ $index }}" class="form-label">Quantity {{ $index + 1 }}</label>
+                        <input type="number" class="form-control" id="quantity_{{ $index }}" name="products[{{ $index }}][quantity]" value="{{ $product->pivot->quantity }}" min="1" required>
                     </div>
+                    @endforeach
 
                     <!-- Status Selection -->
                     <div class="mb-3">
@@ -69,7 +71,7 @@
                     <!-- Total Price (Display Only) -->
                     <div class="mb-3">
                         <label for="total_price" class="form-label">Total Price</label>
-                        <input type="text" class="form-control" id="total_price" value="${{ $order->total_price }}" readonly>
+                        <input type="text" class="form-control" id="total_price" value="${{ $order->calculateTotalPrice() }}" readonly>
                     </div>
 
                     <!-- Submit Button -->
