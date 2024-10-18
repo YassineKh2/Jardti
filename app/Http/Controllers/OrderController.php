@@ -7,8 +7,10 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; // Don't forget to import the Log facade
+use Illuminate\Support\Facades\DB; 
 
 class OrderController extends Controller
 {
@@ -170,9 +172,7 @@ class OrderController extends Controller
         // Retrieve the order for the user (assuming it has a 'pending' status)
         $order = Order::where('user_id', $userId)->where('status', 'pending')->first();
 
-        if (!$order) {
-            return response()->json(['message' => 'Your cart is empty.'], 404);
-        }
+        
 
         // Retrieve the products in the order along with their quantities and prices
         $products = $order->products()->withPivot('quantity', 'price')->get();
@@ -214,21 +214,29 @@ class OrderController extends Controller
     }
     public function updateStatus(Request $request, $id)
     {
-        // Validate the request
-        $request->validate([
-            'status' => 'required|string|max:255', // Adjust validation as needed
-        ]);
-
         // Find the order by ID
         $order = Order::findOrFail($id);
 
-        // Update the status
-        $order->status = $request->status;
+        // Loop through each product in the order and adjust the quantity
+        foreach ($order->products as $product) {
+            // Find the pivot entry to get the quantity ordered for each product
+            $quantityOrdered = $product->pivot->quantity;
+
+            // Reduce the product quantity in the database
+            $product->quantity -= $quantityOrdered;
+
+            // Save the updated product quantity
+            $product->save();
+        }
+
+        // Update the order status to 'submitted'
+        $order->status = 'submitted';
         $order->save();
 
-        // Redirect or respond with success message
-        return redirect()->back()->with('success', 'Order status updated successfully!');
+        // Redirect or respond with a success message
+        return redirect()->route('FrontOffice.productsList')->with('success', 'Order submitted and product quantities updated successfully.');
     }
+
 
     public function getCartCount()
     {
@@ -237,4 +245,86 @@ class OrderController extends Controller
 
         return response()->json(['count' => $cartCount]);
     }
+
+    public function OrdersStats($period = null)
+    {
+        $period = $period ?? 'day';
+
+        // Get statistics for order statuses
+        $orderStats = Order::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->get();
+
+        // Prepare data for the pie chart
+        $labels = $orderStats->pluck('status')->toArray(); // Get the status labels as an array
+        $data = $orderStats->pluck('count')->toArray(); // Get the count of orders as an array
+
+        // Get today's date
+        $today = Carbon::today();
+
+        // Fetch orders created today
+        $ordersToday = Order::whereDate('created_at', $today)
+            ->with('user') // Load user details if necessary
+            ->get();
+
+        // Count the number of orders created today
+        $ordersTodayCount = $ordersToday->count();
+
+        // Get top 5 users by order count
+        $topUsers = Order::selectRaw('user_id, COUNT(*) as order_count')
+            ->groupBy('user_id')
+            ->orderByDesc('order_count')
+            ->with('user') // Load user details using the relationship
+            ->take(5)
+            ->get();
+
+        // Format the top users for better output
+        $topUsers = $topUsers->map(function ($user) {
+            return [
+                'id' => $user->user_id, // user_id from the pivot
+                'name' => $user->user->name ?? 'Unknown', // Assuming 'name' is a column in the User model
+                'total_orders' => $user->order_count,
+                'last_order_date' => Order::where('user_id', $user->user_id)->latest()->value('created_at'), // Fetch the last order date
+            ];
+        });
+        // Determine the date format based on the selected period (day, month, year)
+        switch ($period) {
+            case 'month':
+                $dateFormat = '%Y-%m'; // Group by month
+                break;
+            case 'year':
+                $dateFormat = '%Y'; // Group by year
+                break;
+            case 'day':
+            default:
+                $dateFormat = '%Y-%m-%d'; // Group by day
+                break;
+        }
+
+        // Query the orders grouped by the chosen date format
+        $ordersOverTime = Order::select(DB::raw("DATE_FORMAT(created_at, '$dateFormat') as date"), DB::raw("COUNT(*) as total_orders"))
+            ->groupBy(DB::raw("DATE_FORMAT(created_at, '$dateFormat')")) // Group based on the selected period
+            ->orderBy('date', 'asc') // Sort by date ascending
+            ->get();
+
+
+        // Prepare data for the chart
+        $labels1 = $ordersOverTime->pluck('date')->toArray(); // Extract the date labels
+        $data1 = $ordersOverTime->pluck('total_orders')->toArray(); // Extract the total order counts
+
+        // Pass all necessary data to the view
+        return view('orders.stats', compact(
+            'labels',
+            'data',
+            'ordersOverTime',
+            'ordersToday',
+            'topUsers',
+            'labels1',
+            'data1'
+        ));
+
+        // Pass all necessary data to the view
+    }
+
+
 }

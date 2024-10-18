@@ -1,40 +1,44 @@
 @extends('layouts.navbar', ['title' => 'Shop'])
 
-
-
-
-
 @section('content')
 
 <body>
 
-    <link rel="stylesheet" href="{{ asset('ProductsAssets/bootstrap/css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/all.min.css')}}">
-    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/owl.carousel.css')}}">
-    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/magnific-popup.css')}}">
-    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/animate.css')}}">
-    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/meanmenu.min.css')}}">
-    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/main.css')}}">
-    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/responsive.css')}}">
+    <link rel="stylesheet" href="{{ asset('ProductsAssets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/owl.carousel.css') }}">
+    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/animate.css') }}">
+    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/meanmenu.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('ProductsAssets/css/responsive.css') }}">
 
-    <div class="product-section">
-        <div class="">
-
+    <div class="product-section d-flex flex-column min-vh-100">
+        <div class="flex-grow-1">
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-10" style="margin-bottom: 0 !important;">
                     <div class="product-filters">
                         <ul>
                             <li class="active" data-filter="*">All</li>
-                            <li data-filter=".strawberry">Strawberry</li>
-                            <li data-filter=".berry">Berry</li>
-                            <li data-filter=".lemon">Lemon</li>
+                            @foreach($categories as $category)
+                            <li data-filter="{{ $category['category'] }}">{{ $category['category'] }}</li>
+                            @endforeach
                         </ul>
+                    </div>
+                </div>
+
+                <div class="collapse show col-md-10" style="align-items: center; padding: 0; margin-left: 10%;">
+                    <div class="billing-address-form" style="padding: 0 !important;">
+                        <form action="{{ route('products.search') }}" method="GET" class="d-flex billing-address-form">
+                            <input type="text" name="query" class="col-md-6 form-control" placeholder="Search products..." value="{{ request()->input('query') }}">
+                            <a type="submit" class="cart-btn ml-2" style="background-color: #5cb85c !important;"><i class="fas fa-search"></i> Search</a>
+                        </form>
                     </div>
                 </div>
             </div>
 
-            <div class="row product-lists">
-                
+            <div class="row product-lists" id="product-list">
+                @if($products->count())
                 @foreach ($products as $product)
                 <div class="col-lg-3 col-md-4 text-center mr-2">
                     <div class="single-product-item">
@@ -44,69 +48,79 @@
                             </a>
                         </div>
                         <h3>{{ $product->name }}</h3>
-                        <p class="product-price">${{ number_format($product->price, 2) }} </p>
+                        <p class="product-price">${{ number_format($product->price, 2) }}</p>
                         <a href="{{ route('products.show', $product->id) }}" class="cart-btn" style="background-color: #5cb85c !important;">
                             <i class="fas fa-info"></i> See details
                         </a>
                     </div>
                 </div>
                 @endforeach
+                @else
+                <p>No products found.</p>
+                @endif
             </div>
 
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="pagination-wrap">
-                        <ul>
-                            <li><a href="#">Prev</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a class="active" href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">Next</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    <!-- 
-    <div class="container my-5">
-        <h1 class="mb-4">Product List</h1>
-        <div class="row">
-            @foreach ($products as $product)
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $product->name }}</h5>
-                        <p class="card-text">${{ number_format($product->price, 2) }}</p>
-                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Details</a>
-                        <a href="#" class="btn btn-success">Add to Cart</a>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div> -->
 
-    <!-- jquery -->
     <script src="{{ asset('ProductsAssets/js/jquery-1.11.3.min.js') }}"></script>
-    <!-- bootstrap -->
     <script src="{{ asset('ProductsAssets/bootstrap/js/bootstrap.min.js') }}"></script>
-    <!-- count down -->
+
+    <script>
+        $(document).ready(function() {
+            // Lorsque l'utilisateur clique sur une catégorie
+            $('li[data-filter]').on('click', function() {
+                var category = $(this).data('filter'); // Récupérer la catégorie
+
+                if (category === '*') {
+                    // Si la catégorie est "All", recharger la page pour afficher tous les produits
+                    window.location.href = "/Client/ProductsList"; // Change this to your actual route
+                } else {
+                    // Faire une requête AJAX pour récupérer les produits de cette catégorie
+                    $.ajax({
+                        url: '/products/category/' + category, // URL vers la route Laravel
+                        type: 'GET',
+                        success: function(products) {
+                            // Vider la liste des produits
+                            $('#product-list').empty();
+
+                            // Boucler sur chaque produit et l'ajouter dans le DOM
+                            $.each(products, function(index, product) {
+                                $('#product-list').append(`
+                                    <div class="col-lg-3 col-md-4 text-center mr-2">
+                                        <div class="single-product-item">
+                                            <div class="product-image">
+                                                <a href="/products/` + product.id + `">
+                                                    <img src="/storage/` + product.image + `" alt="` + product.name + `" class="img-fluid" style="aspect-ratio: 3/3; object-fit:cover;">
+                                                </a>
+                                            </div>
+                                            <h3>` + product.name + `</h3>
+                                            <p class="product-price">$` + parseFloat(product.price).toFixed(2) + `</p>
+                                            <a href="/products/` + product.id + `" class="cart-btn" style="background-color: #5cb85c !important;">
+                                                <i class="fas fa-info"></i> See details
+                                            </a>
+                                        </div>
+                                    </div>
+                                `);
+                            });
+                        },
+                        error: function() {
+                            alert('Erreur lors de la récupération des produits.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <!-- Additional Scripts -->
     <script src="{{ asset('ProductsAssets/js/jquery.countdown.js') }}"></script>
-    <!-- isotope -->
     <script src="{{ asset('ProductsAssets/js/jquery.isotope-3.0.6.min.js') }}"></script>
-    <!-- waypoints -->
     <script src="{{ asset('ProductsAssets/js/waypoints.js') }}"></script>
-    <!-- owl carousel -->
     <script src="{{ asset('ProductsAssets/js/owl.carousel.min.js') }}"></script>
-    <!-- magnific popup -->
     <script src="{{ asset('ProductsAssets/js/jquery.magnific-popup.min.js') }}"></script>
-    <!-- mean menu -->
     <script src="{{ asset('ProductsAssets/js/jquery.meanmenu.min.js') }}"></script>
-    <!-- sticker js -->
     <script src="{{ asset('ProductsAssets/js/sticker.js') }}"></script>
-    <!-- main js -->
     <script src="{{ asset('ProductsAssets/js/main.js') }}"></script>
 
 </body>

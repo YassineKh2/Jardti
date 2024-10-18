@@ -1,4 +1,3 @@
-now update this template
 @extends('layouts.vertical', ['title' => 'Edit Product'])
 
 @section('css')

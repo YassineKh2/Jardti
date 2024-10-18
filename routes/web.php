@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\PointsController;
 use \App\Http\Controllers\ItemController;
-
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +38,10 @@ Route::get('/cart', [OrderController::class, 'showCart'])->name('order.showcart'
 Route::delete('/cart/{product}', [OrderController::class, 'removeProduct'])->name('cart.remove');
 Route::post('/order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
 Route::get('/api/cart-count', [OrderController::class, 'getCartCount']);
+Route::get('/products/category/{category}', [ProductController::class, 'getProductsByCategory']);
+Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+Route::get('/statistics/products', [ProductController::class, 'ProductStats'])->name('statistics.products');
+Route::get('/statistics/orders/{period?}', [OrderController::class, 'OrdersStats'])->name('statistics.orders');
 
 Route::get('/', function () {
     return view('indexFront');
