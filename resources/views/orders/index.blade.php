@@ -168,6 +168,7 @@
                         <label for="status" class="form-label">Status</label>
                         <select class="form-control" id="status" name="status" required>
                             <option value="pending">Pending</option>
+                            <option value="submitted">Submitted</option>
                             <option value="completed">Completed</option>
                             <option value="cancelled">Cancelled</option>
                         </select>

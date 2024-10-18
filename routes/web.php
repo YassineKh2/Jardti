@@ -32,10 +32,17 @@ use \App\Http\Controllers\ItemController;
 // Routes pour la gestion des produits (CRUD complet avec ProductController)
 Route::resource('products', ProductController::class);
 Route::resource('orders', OrderController::class);
- Route::get('/Client/ProductsList', [ProductController::class, 'productsList']);
+Route::get('/Client/ProductsList', [ProductController::class, 'productsList'])->name('FrontOffice.productsList');
+Route::post('/cart/add/{productId}', [OrderController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart', [OrderController::class, 'showCart'])->name('order.showcart');
+Route::delete('/cart/{product}', [OrderController::class, 'removeProduct'])->name('cart.remove');
+Route::post('/order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
+Route::get('/api/cart-count', [OrderController::class, 'getCartCount']);
+
 Route::get('/', function () {
     return view('indexFront');
 });
+
 
 
 

@@ -83,7 +83,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('products.show', compact('product'));
+        return view('FrontOffice.productsDetails', compact('product'));
     }
 
     /**
@@ -161,4 +161,5 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
+    
 }

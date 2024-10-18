@@ -122,4 +122,119 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index')->with('success', 'Order cancelled successfully.');
     }
+
+    public function addToCart(Request $request, $productId)
+    {
+        // Assuming the static user ID is 1
+        $userId = 1;
+
+        // Validate the quantity; it's optional because we'll default to 1
+        $request->validate([
+            'quantity' => 'integer|min:1', // Make it optional
+        ]);
+
+        // Use the provided quantity or default to 1
+        $quantity = $request->input('quantity', 1);
+
+        // Find the product by ID
+        $product = Product::find($productId);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        // Create or retrieve the order for the user
+        $order = Order::firstOrCreate(
+            ['user_id' => $userId, 'status' => 'pending'] // Adjust the status as needed
+        );
+
+        // Check if the product is already in the order
+        $existingProduct = $order->products()->where('product_id', $productId)->first();
+
+        if ($existingProduct) {
+            // Update the quantity if the product already exists in the order
+            $newQuantity = $existingProduct->pivot->quantity + $quantity;
+            $order->products()->updateExistingPivot($productId, ['quantity' => $newQuantity]);
+            return redirect()->route('order.showcart')->with('success', 'Order updated successfully.');
+        }
+
+        // Attach the product to the order with the specified or default quantity
+        $order->products()->attach($productId, ['quantity' => $quantity, 'price' => $product->price]);
+        return redirect()->route('order.showcart')->with('success', 'Order updated successfully.');
+    }
+    public function showCart()
+    {
+        // Assuming a static user with ID 1
+        $userId = 1; // Replace with the actual user ID as needed
+
+        // Retrieve the order for the user (assuming it has a 'pending' status)
+        $order = Order::where('user_id', $userId)->where('status', 'pending')->first();
+
+        if (!$order) {
+            return response()->json(['message' => 'Your cart is empty.'], 404);
+        }
+
+        // Retrieve the products in the order along with their quantities and prices
+        $products = $order->products()->withPivot('quantity', 'price')->get();
+
+        // Prepare a response with the cart details
+        $cartDetails = [
+            'order_id' => $order->id,
+            'products' => $products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'image' => $product->image,
+                    'name' => $product->name, // Assuming the Product model has a name property
+                    'quantity' => $product->pivot->quantity,
+                    'price' => $product->pivot->price,
+                    'total_price' => $product->pivot->quantity * $product->pivot->price, // Calculate total price for this product
+                ];
+            }),
+            'total_amount' => $products->sum(function ($product) {
+                return $product->pivot->quantity * $product->pivot->price; // Total amount of the cart
+            }),
+        ];
+
+        // Return the cart details as a JSON response
+        return view('FrontOffice.myCart', compact('cartDetails'));
+    }
+    public function removeProduct($productId)
+    {
+        // Retrieve the static user's active order
+        $order = Order::where('user_id', 1)->where('status', 'pending')->first();
+
+        if (!$order) {
+            return redirect()->back()->with('error', 'No active order found.');
+        }
+
+        // Detach the product from the order (remove it from the cart)
+        $order->products()->detach($productId);
+
+        return redirect()->back()->with('success', 'Product removed from cart.');
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        // Validate the request
+        $request->validate([
+            'status' => 'required|string|max:255', // Adjust validation as needed
+        ]);
+
+        // Find the order by ID
+        $order = Order::findOrFail($id);
+
+        // Update the status
+        $order->status = $request->status;
+        $order->save();
+
+        // Redirect or respond with success message
+        return redirect()->back()->with('success', 'Order status updated successfully!');
+    }
+
+    public function getCartCount()
+    {
+        $cartCount = Order::where('user_id', 1)->where('status', 'pending')->withCount('products')->first()->products_count ?? 0;
+
+
+        return response()->json(['count' => $cartCount]);
+    }
 }

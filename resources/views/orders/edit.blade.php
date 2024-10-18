@@ -63,6 +63,7 @@
                         <label for="status" class="form-label">Status</label>
                         <select class="form-control" id="status" name="status" required>
                             <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="submitted" {{ $order->status == 'submitted' ? 'selected' : '' }}>Submitted</option>
                             <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
                             <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                         </select>
