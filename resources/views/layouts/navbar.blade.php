@@ -18,27 +18,19 @@
         <div class="container-fluid">
             <!-- Logo on the left -->
             <a class="navbar-brand ms-2 p-1" href="#">
-                <img src="images/Jardti.png" alt="Logo" width="140" height="60">
+            <img src="{{ asset('images/Jardti.png') }}" alt="Logo" width="140" height="60">
             </a>
-
-            <!-- Navbar toggler button for mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Collapsible navbar content -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="d-flex  ms-auto">
-                    <!-- Text in the center -->
-                    <a href="/" class="nav-link">Home</a>
-                    <a href="#" class="nav-link">Shop</a>
-                    <a href="#" class="nav-link">Tasks</a>
-                    <a href="#" class="nav-link">Forum</a>
-                    <a href="#" class="nav-link">Trading</a>
+            <div class="d-flex gap-3">
+                <!-- Text in the center -->
+                <a href="/" class="nav-link">Home</a>
+                <a class="nav-link">Shop</a>
+                <a class="nav-link">Tasks</a>
+                <a class="nav-link">Forum</a>
+                <a class="nav-link">Trading</a>
+                <a class="nav-link" href="{{ route('eventsFront') }}">Events</a>
                 </div>
-                <!-- Button on the right -->
-                <button class="btn btn-success ms-lg-5 ms-3" type="button">Get Started</button>
-            </div>
+            <!-- Button on the right -->
+            <button class="btn btn-success" type="button">Get Started</button>
         </div>
     </nav>
 
