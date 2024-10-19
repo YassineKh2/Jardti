@@ -70,7 +70,7 @@ class EventController extends Controller
 
         $event->save();
     
-        return redirect()->route('events')->with('success', 'Event created successfully!');
+        return redirect()->route('events.index')->with('success', 'Event created successfully!');
     }
     
     
@@ -145,7 +145,7 @@ class EventController extends Controller
        
         $event->save();
 
-        return redirect()->route('events')->with('success', 'Event updated successfully!');
+        return redirect()->route('events.index')->with('success', 'Event updated successfully!');
     }
 
     /**
@@ -164,7 +164,7 @@ class EventController extends Controller
 
     $event->delete();
 
-    return redirect()->route('events')->with('success', 'Event deleted successfully!');
+    return redirect()->route('events.index')->with('success', 'Event deleted successfully!');
     }
 
     public function showCalendar()
@@ -172,5 +172,18 @@ class EventController extends Controller
     $events = Event::select('name as title', 'start_date as start', 'end_date as end')->get();
     return view('calendar', compact('events'));
 }
+
+public function showTimeLine()
+{
+    // Fetch events with all the necessary data for the timeline
+    $events = Event::select('name', 'description', 'start_date', 'end_date')
+                   ->orderBy('start_date', 'asc') // Ensure events are ordered by start date
+                   ->get();
+
+    return view('Events.eventTimeline', compact('events'));
+}
+
+
+
 
 }

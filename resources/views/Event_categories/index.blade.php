@@ -1,69 +1,100 @@
 @extends('layouts.vertical', ['title' => 'Event Categories'])
 
+@section('css')
+    <style>
+        .category-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+@endsection
+
 @section('content')
+
 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
     <div class="flex-grow-1">
         <h4 class="fs-18 fw-semibold m-0">Event Categories</h4>
     </div>
 
     <div class="text-end">
-        <ol class="breadcrumb m-0 py-0">
+        <ol class="breadcrumb m-0 py-0 d-inline-block">
             <li class="breadcrumb-item"><a href="javascript: void(0);">Components</a></li>
             <li class="breadcrumb-item active">Event Categories</li>
         </ol>
+    </div>
 
-        <!-- Create Event Category Button -->
-        <a href="{{ route('categories.create') }}" class="btn btn-primary">
+    <!-- Create Event Category Button -->
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ route('event-categories.create') }}" class="btn btn-primary">
             <i data-feather="plus"></i> Create Event Category
         </a>
     </div>
 </div>
 
+<!-- Table-based Category Listing with Image Column -->
 <div class="row">
-    @foreach($categories as $category)
-    <div class="col-sm-6 col-xl-3">
-        <!-- Category card -->
-        <div class="card d-block">
-            <!-- If category has an image, display it; otherwise, show a default image -->
-            <img class="card-img-top rounded-top" src="{{ $category->image ? asset($category->image) : '/images/default-category.jpg' }}" alt="{{ $category->name }}">
-
-            <div class="card-body">
-                <h4 class="card-title">{{ $category->name }}</h4>
-                <p class="card-text text-muted">{{ $category->description ? Str::limit($category->description, 100) : 'No description available.' }}</p>
-
-                <!-- Icons for Edit and Delete -->
-                <div class="d-flex justify-content-end">
-                    <!-- Edit Icon -->
-                    <a href="{{ route('categories.edit', $category->id) }}" title="Edit Category" style="border: none; background: none;">
-                        <i data-feather="edit" style="color: gray; cursor: pointer;"></i>
-                    </a>
-
-                    <!-- Delete Icon with SweetAlert Confirmation -->
-                    <button type="button" title="Delete Category" style="border: none; background: none;" onclick="confirmDelete('{{ $category->id }}')">
-                        <i data-feather="trash" style="color: red; cursor: pointer;"></i>
-                    </button>
-
-                    <form id="delete-form-{{ $category->id }}" action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display: none;">
-                        @csrf
-                        @method('DELETE')
-                    </form>
+    <div class="col-md-12">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title mb-0">Event Categories</h5>
                 </div>
-            </div> <!-- end card-body-->
-        </div> <!-- end card-->
-    </div><!-- end col -->
-    @endforeach
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-traffic mb-0">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Category Name</th>
+                                <th>Description</th>
+                                <th colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($eventCategories as $category)
+                            <tr>
+                                <!-- Category Image -->
+                                <td>
+                                    <img src="{{ $category->image ? asset($category->image) : asset('images/default-category.jpg') }}" alt="{{ $category->name }}" class="category-image">
+                                </td>
+
+                                <!-- Other Category Details -->
+                                <td>{{ $category->name }}</td>
+                                <td>{{ Str::limit($category->description ?? 'No description available', 50) }}</td>
+                                <td>                                                       
+                                    <a href="{{ route('event-categories.edit', $category->id) }}">
+                                        <i class="mdi mdi-pencil text-muted fs-18 rounded-2 border p-1 me-1"></i>
+                                    </a>
+                                    <form id="delete-form-{{ $category->id }}" action="{{ route('event-categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="delete-button" onclick="confirmDelete({{ $category->id }})" style="border: none; background: none;">
+                                            <i class="mdi mdi-delete text-muted fs-18 rounded-2 border p-1"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 @endsection
 
 @section('script')
-    <!-- Include SweetAlert JS -->
+    <!-- SweetAlert CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // Initialize Feather icons
-        feather.replace();
-
-        // SweetAlert for Delete Confirmation
+        // SweetAlert confirmation before deleting
         function confirmDelete(categoryId) {
             Swal.fire({
                 title: 'Are you sure?',
@@ -75,10 +106,8 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Submit the form for deletion
                     document.getElementById('delete-form-' + categoryId).submit();
-                    
-                    // Show success message after form submission
+
                     Swal.fire({
                         title: 'Deleted!',
                         text: 'The category has been deleted.',
@@ -87,7 +116,7 @@
                         showConfirmButton: false
                     });
                 }
-            })
+            });
         }
     </script>
 

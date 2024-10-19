@@ -7,33 +7,17 @@ use App\Models\EventCategory;
 
 class EventCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $categories = EventCategory::all();
-        return view('Event_categories.index', compact('categories'));
+        $eventCategories = EventCategory::all();  // Event Category Model
+        return view('Event_categories.index', compact('eventCategories'));  // Event Category Views
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('Event_categories.create');
+        return view('Event_categories.create');  // Event Category Views
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -42,52 +26,27 @@ class EventCategoryController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $category = new EventCategory();
-        $category->name = $request->name;
-        $category->description = $request->description;
+        $eventCategory = new EventCategory();
+        $eventCategory->name = $request->name;
+        $eventCategory->description = $request->description;
 
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('images/EventCategories'), $imageName);
-            $category->image = 'images/EventCategories/' . $imageName;
+            $eventCategory->image = 'images/EventCategories/' . $imageName;
         }
 
-        $category->save();
+        $eventCategory->save(); // Save the event category to the database
 
-        return redirect()->route('categories')->with('success', 'Event Category created successfully!');
+        return redirect()->route('event-categories.index')->with('success', 'Event Category created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $category = EventCategory::findOrFail($id);
-        return view('Event_categories.show', compact('category'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $category = EventCategory::findOrFail($id);
-        return view('Event_categories.edit', compact('category'));
+        $eventCategory = EventCategory::findOrFail($id);
+        return view('Event_categories.edit', compact('eventCategory'));  // Event Category Views
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -96,46 +55,32 @@ class EventCategoryController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        // Find the category to update
-        $category = EventCategory::findOrFail($id);
-
-      $category->name = $request->name;
-        $category->description = $request->description;
+        $eventCategory = EventCategory::findOrFail($id);
+        $eventCategory->name = $request->name;
+        $eventCategory->description = $request->description;
 
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('images/EventCategories'), $imageName);
-            $imagePath = 'images/EventCategories/' . $imageName;
-
-           if ($category->image && file_exists(public_path($category->image))) {
-                unlink(public_path($category->image));
-            }
-
-            $category->image = $imagePath;
+            $eventCategory->image = 'images/EventCategories/' . $imageName;
         }
 
-        // Save the updated category
-        $category->save();
+        $eventCategory->save(); // Update the event category in the database
 
-        return redirect()->route('categories')->with('success', 'Event Category updated successfully!');
+        return redirect()->route('event-categories.index')->with('success', 'Event Category updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $category = EventCategory::findOrFail($id);
+        $eventCategory = EventCategory::findOrFail($id);
 
-        if ($category->image && file_exists(public_path($category->image))) {
-            unlink(public_path($category->image));
+        if ($eventCategory->image && file_exists(public_path($eventCategory->image))) {
+            unlink(public_path($eventCategory->image));
         }
 
-        $category->delete();
+        $eventCategory->delete(); // Delete the event category
 
-        return redirect()->route('categories')->with('success', 'Event Category deleted successfully!');
+        return redirect()->route('event-categories.index')->with('success', 'Event Category deleted successfully!');
     }
 }
+

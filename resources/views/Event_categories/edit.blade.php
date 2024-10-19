@@ -19,43 +19,36 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">Category Details</h5>
+                <h5 class="card-title mb-0">Event Category Details</h5>
             </div>
 
             <div class="card-body">
-                <form action="{{ route('categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('event-categories.update', $eventCategory->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @method('PUT') <!-- This method ensures it’s an update -->
+                    @method('PUT')
 
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <!-- Category Name -->
-                            <div class="mb-3">
-                                <label class="form-label" for="name">Category Name</label>
-                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $category->name) }}" required>
-                            </div>
-
-                            <!-- Description -->
-                            <div class="mb-3">
-                                <label class="form-label" for="description">Description</label>
-                                <textarea class="form-control" id="description" name="description">{{ old('description', $category->description) }}</textarea>
-                            </div>
-
-                            <!-- Image Upload -->
-                            <div class="mb-3">
-                                <label class="form-label" for="image">Category Image</label>
-                                @if($category->image)
-                                    <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" class="img-thumbnail mb-2" style="width: 150px;">
-                                @endif
-                                <input type="file" class="form-control" id="image" name="image">
-                            </div>
-                        </div>
+                    <!-- Category Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Category Name</label>
+                        <input type="text" class="form-control" name="name" value="{{ old('name', $eventCategory->name) }}" required>
                     </div>
 
-                    <!-- Align Button to the Right -->
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Update Category</button>
+                    <!-- Category Description -->
+                    <div class="mb-3">
+                        <label class="form-label">Category Description</label>
+                        <textarea class="form-control" name="description">{{ old('description', $eventCategory->description) }}</textarea>
                     </div>
+
+                    <!-- Category Image -->
+                    <div class="mb-3">
+                        <label class="form-label">Category Image</label>
+                        <input type="file" class="form-control" name="image">
+                        @if($eventCategory->image)
+                            <img src="{{ asset($eventCategory->image) }}" alt="{{ $eventCategory->name }}" class="img-thumbnail mt-2" style="max-width: 200px;">
+                        @endif
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update Category</button>
                 </form>
             </div>
         </div>
