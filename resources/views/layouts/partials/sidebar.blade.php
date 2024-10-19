@@ -184,10 +184,10 @@
                     <div class="collapse" id="sidebarShop">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="/shop/categories" class="tp-link">Categories</a>
+                                <a href="/back/shop/categories" class="tp-link">Categories</a>
                             </li>
                             <li>
-                                <a href="/shop/items" class="tp-link">Items</a>
+                                <a href="/back/shop/items" class="tp-link">Items</a>
                             </li>
                         </ul>
                     </div>

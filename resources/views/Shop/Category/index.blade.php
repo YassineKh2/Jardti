@@ -3,7 +3,7 @@
 @section('content')
     <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
         <div class="flex-grow-1">
-            <h4 class="fs-18 fw-semibold m-0">Basic Tables</h4>
+            <h4 class="fs-18 fw-semibold m-0">Gamification Shop</h4>
         </div>
 
         <div class="text-end">
@@ -19,7 +19,7 @@
         <div class="">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Hoverable Table</h5>
+                    <h5 class="card-title mb-0">Categories</h5>
                     <a href="categories/create"><i data-feather="plus-circle" style="height: 20px; width: 20px; color:gray;"></i></a>
                 </div>
 

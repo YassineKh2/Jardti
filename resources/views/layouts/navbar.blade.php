@@ -5,6 +5,9 @@
     @yield('css')
     @include('layouts.partials/head-css')
     <link rel="stylesheet" href="../../scss/navbar.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body data-menu-color="light" data-sidebar="default" @yield('body') >
@@ -30,6 +33,8 @@
             <button class="btn btn-success" type="button">Get Started</button>
         </div>
     </nav>
+
+
 
     <div class="content-page">
         <div class="content">
