@@ -52,3 +52,16 @@ Route::resource('/back/shop/categories', CategoryController::class);
 
 Route::resource('/back/course-categories', CourseCategoriesController::class);
 Route::resource('/back/courses', CoursesController::class);
+Route::get('/courses/by-category/{id}', [CoursesController::class, 'getCoursesByCategory']);
+//Route::get('/courses/category/{id}', [CoursesController::class, 'showCoursesByCategory'])->name('courses.byCategory');
+Route::get('/courses/search', [CoursesController::class, 'search'])->name('courses.search');
+Route::get('/courses/{categoryId?}', [CoursesController::class, 'showCoursesByCategory'])->name('courses.byCategory');
+
+Route::get('/courses', function () {
+    $categories = \App\Models\CourseCategory::all();
+    return view('courses.frontend', [
+        'categories' => $categories,
+        'title' => 'Courses'  // Pass the title here
+    ]);
+});
+
