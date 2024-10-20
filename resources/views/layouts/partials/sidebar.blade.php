@@ -105,7 +105,8 @@
                     </div>
                 </li>
 
-                <li>
+              
+                  <li>
                     <a href="#sidebarExpages" data-bs-toggle="collapse">
                         <i data-feather="file-text"></i>
                         <span> Utility </span>
@@ -143,9 +144,31 @@
                         </ul>
                     </div>
                 </li>
-
                 <li>
-                    <a href="#" class="tp-link">
+    <a href="#sidebarEvents" data-bs-toggle="collapse">
+        <i data-feather="calendar"></i>
+        <span> Events </span>
+        <span class="menu-arrow"></span>
+    </a>
+    <div class="collapse" id="sidebarEvents">
+        <ul class="nav-second-level">
+            <li>
+            <a class="tp-link" href="{{ route('events.index') }}">All Events</a>
+            </li>
+            <li>
+                <a class="tp-link" href="{{ route('events.create') }}">Create Event</a>
+            </li>
+           
+            <li>
+            <a class="tp-link" href="{{ route('event-categories.index') }}">Event Categories</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+                
+                <li>
+                    <a href="{{ route('calendar') }}" class="tp-link">
                         <i data-feather="calendar"></i>
                         <span> Calendar </span>
                     </a>
@@ -162,10 +185,10 @@
                     <div class="collapse" id="sidebarShop">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="/shop/categories" class="tp-link">Categories</a>
+                                <a href="/back/shop/categories" class="tp-link">Categories</a>
                             </li>
                             <li>
-                                <a href="/shop/items" class="tp-link">Items</a>
+                                <a href="/back/shop/items" class="tp-link">Items</a>
                             </li>
                         </ul>
                     </div>

@@ -1,10 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventCategoryController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TaskController;
+
 use \App\Http\Controllers\PointsController;
 use \App\Http\Controllers\CourseCategoriesController;
 use \App\Http\Controllers\CoursesController;
+use \App\Http\Controllers\ItemController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,19 +40,36 @@ Route::get('/back', function () {
     return view('index');
 });
 
+// ---------------------  Event Routes --------------------- //
+Route::resource('/back/events', EventController::class);
+Route::get('/back/calendar', [EventController::class, 'showCalendar'])->name('calendar');
+Route::get('/event/timeline', [EventController::class, 'showTimeline'])->name('timelineEvent');
+Route::resource('/back/event-categories', EventCategoryController::class);
+Route::get('/events', function () {
+    return view('Events.eventsFront', ['title' => 'Events']);
+})->name('eventsFront');
+// --------------------- tasks  Routes --------------------- //
+
+Route::resource('tasks', TaskController::class);
+
 
 // ---------------------  General Routes --------------------- //
 
 
 
 
-// ---------------------  Shop Routes --------------------- //
+// --------------------- Gamification Shop Routes --------------------- //
 
 Route::resource('/mypoints', PointsController::class);
+Route::get('/mypoints/filter/{id}', [PointsController::class,'FilterByCategory'])->name('mypoints.filter');
 
 Route::resource('/back/shop/categories', CategoryController::class);
 
-// --------------------- Shop Routes --------------------- //
+
+Route::resource('/back/shop/items', ItemController::class);
+
+// --------------------- Gamification Shop Routes --------------------- //
+
 
 
 // Resource route for Course Categories

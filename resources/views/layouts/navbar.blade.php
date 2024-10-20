@@ -34,6 +34,10 @@
             width: 100%;
         }
     </style>
+    <link rel="stylesheet" href="../../scss/navbar.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- 3 lines above might cause problem -->
 </head>
 
 <body data-menu-color="light" data-sidebar="default" @yield('body') >
@@ -43,7 +47,7 @@
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand ms-2 p-1" href="#">
-                <img src="{{ asset('images/Jardti.png') }}" alt="Logo" width="140" height="60">
+            <img src="{{ asset('images/Jardti.png') }}" alt="Logo" width="140" height="60">
             </a>
             <div class="d-flex gap-3">
                 <!-- Centered navbar links -->
@@ -55,6 +59,9 @@
                 <a href="/courses" class="nav-link">Courses</a>
             </div>
             <!-- Button -->
+                <a class="nav-link" href="{{ route('eventsFront') }}">Events</a>
+                </div>
+            <!-- Button on the right -->
             <button class="btn btn-success" type="button">Get Started</button>
         </div>
     </nav>
