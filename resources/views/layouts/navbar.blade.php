@@ -57,11 +57,9 @@
                 <a class="nav-link">Forum</a>
                 <a class="nav-link">Trading</a>
                 <a href="/courses" class="nav-link">Courses</a>
-            </div>
-            <!-- Button -->
                 <a class="nav-link" href="{{ route('eventsFront') }}">Events</a>
-                </div>
-            <!-- Button on the right -->
+            </div>
+            
             <button class="btn btn-success" type="button">Get Started</button>
         </div>
     </nav>
