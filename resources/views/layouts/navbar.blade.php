@@ -40,6 +40,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <!-- 3 lines above might cause problem -->
+
 </head>
 
 <body data-menu-color="light" data-sidebar="default" @yield('body') >
@@ -62,6 +63,9 @@
                 <a class="nav-link" href="{{ route('eventsFront') }}">Events</a>
             </div>
             
+                 
+                </div>
+            <!-- Button on the right -->
             <button class="btn btn-success" type="button">Get Started</button>
         </div>
     </nav>

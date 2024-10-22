@@ -72,6 +72,7 @@ Route::resource('/back/shop/items', ItemController::class);
 
 
 
+
 // Resource route for Course Categories
 
 Route::resource('/back/course-categories', CourseCategoriesController::class);
