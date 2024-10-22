@@ -70,10 +70,20 @@
         </div>
     </nav>
 
+<<<<<<< HEAD
     
     <div class="custom-content">
         <div class="container-fluid">
             @yield('content')
+=======
+
+
+    <div class="content-page">
+        <div class="content">
+            <div class="container-xxl">
+                @yield('content')
+            </div>
+>>>>>>> f093103ccbf6f8a024dac18329947357f5ed621d
         </div>
     </div>
 

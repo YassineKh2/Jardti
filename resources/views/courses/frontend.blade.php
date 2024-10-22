@@ -55,14 +55,14 @@
                             <div class="card h-100 shadow border-0 hover-shadow"> <!-- Hover effect on cards -->
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <h5 class="card-title fw-bold text-dark">Course : {{ $course->title }}</h5>
-                                    <p class="card-text text-muted">Description : {{ Str::limit($course->description, 100) }}</p>
+                                    <p class="card-text  ">Description : {{ Str::limit($course->description, 100) }}</p>
                                 </div>
                                 <div class="card-footer bg-transparent border-0">
                                 <a href="{{ Storage::url($course->pdf) }}" target="_blank" class="btn btn-success btn-sm w-100">
     <i class="fas fa-file-pdf"></i> Download PDF
 </a>
 
-
+<br><br>
                                     @if($course->audio)
                                         <!-- Audio Player -->
                                          
@@ -71,9 +71,9 @@
                                             <source src="{{ asset($course->audio) }}" type="audio/mpeg">
                                             Your browser does not support the audio element.
                                         </audio>
-                                        <p class="card-text text-muted">Audiobook Version </p>
+                                        <p class="card-text  ">Audiobook Version </p>
                                     @else
-                                        <p class="text-muted mt-2">No audio available</p>
+                                        <p class=" mt-2">No audio available</p>
                                     @endif
                                 </div>
                             </div>
