@@ -52,7 +52,7 @@
             <a class="navbar-brand ms-2 p-1" href="#">
             <img src="{{ asset('images/Jardti.png') }}" alt="Logo" width="140" height="60">
             </a>
-            <div class="d-flex gap-3">
+            <div class="d-flex flex-grow-1 justify-content-center gap-3">
                 <!-- Centered navbar links -->
                 <a href="/" class="nav-link">Home</a>
                 <a class="nav-link">Shop</a>
@@ -70,20 +70,10 @@
         </div>
     </nav>
 
-<<<<<<< HEAD
     
     <div class="custom-content">
         <div class="container-fluid">
             @yield('content')
-=======
-
-
-    <div class="content-page">
-        <div class="content">
-            <div class="container-xxl">
-                @yield('content')
-            </div>
->>>>>>> f093103ccbf6f8a024dac18329947357f5ed621d
         </div>
     </div>
 
