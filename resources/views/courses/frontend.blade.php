@@ -14,14 +14,14 @@
 
     <div class="row">
         <!-- Left Sidebar for Categories that spans the full height -->
-        <div class="col-md-3 d-flex flex-column" style="min-height: 100vh;">
+        <div class="col-md-3 d-flex flex-column" style="min-height: 60vh;">
             <div class="p-3 bg-white shadow-sm rounded border h-100"> <!-- Full-height card -->
                 <h5 class="mb-4 text-success fw-bold">Explore Different Categories</h5> <!-- Green heading for categories -->
                 <div class="list-group list-group-flush">
-                    @foreach($categories as $category)
+                    @foreach($categories as $index => $category)
                         @php
-                            // Make "Plants" selected by default if no category is selected
-                            $isActive = (isset($selectedCategory) && $selectedCategory->id == $category->id) || (!isset($selectedCategory) && $category->name === 'Plants');
+                            // Make the first category selected by default if no category is selected
+                            $isActive = (isset($selectedCategory) && $selectedCategory->id == $category->id) || (!isset($selectedCategory) && $index === 0);
                         @endphp
                         <a href="{{ route('courses.byCategory', $category->id) }}"
                            class="list-group-item list-group-item-action {{ $isActive ? 'active bg-success text-white' : '' }}"
@@ -42,7 +42,7 @@
                 <h5 class="text-success fw-bold">Courses</h5> <!-- Green heading for courses -->
                 <!-- Updated Search Bar for Courses -->
                 <form class="d-flex" method="GET" action="{{ route('courses.search') }}">
-                    <input class="form-control me-5 shadow-sm rounded-pill" type="search" name="query" placeholder="Search courses..." aria-label="Search"> <!-- Rounded search input -->
+                    <input class="form-control me-2 shadow-sm rounded-pill" type="search" name="query" placeholder="Search courses..." aria-label="Search"> <!-- Rounded search input -->
                     <button class="btn btn-success shadow-sm rounded-pill" type="submit">Search</button> <!-- Green, rounded search button -->
                 </form>
             </div>
@@ -54,11 +54,27 @@
                         <div class="col">
                             <div class="card h-100 shadow border-0 hover-shadow"> <!-- Hover effect on cards -->
                                 <div class="card-body d-flex flex-column justify-content-between">
-                                    <h5 class="card-title fw-bold text-dark">{{ $course->title }}</h5>
-                                    <p class="card-text text-muted">{{ Str::limit($course->description, 100) }}</p>
+                                    <h5 class="card-title fw-bold text-dark">Course : {{ $course->title }}</h5>
+                                    <p class="card-text text-muted">Description : {{ Str::limit($course->description, 100) }}</p>
                                 </div>
                                 <div class="card-footer bg-transparent border-0">
-                                    <a href="{{ Storage::url($course->pdf) }}" target="_blank" class="btn btn-success btn-sm w-100">Download PDF</a> <!-- Green button -->
+                                <a href="{{ Storage::url($course->pdf) }}" target="_blank" class="btn btn-success btn-sm w-100">
+    <i class="fas fa-file-pdf"></i> Download PDF
+</a>
+
+
+                                    @if($course->audio)
+                                        <!-- Audio Player -->
+                                         
+                                        <audio controls class="mt-2 w-100">
+                                       
+                                            <source src="{{ asset($course->audio) }}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                        <p class="card-text text-muted">Audiobook Version </p>
+                                    @else
+                                        <p class="text-muted mt-2">No audio available</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>

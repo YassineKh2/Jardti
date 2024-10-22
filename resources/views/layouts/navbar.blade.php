@@ -4,6 +4,8 @@
     @include('layouts.partials/title-meta', ['title' => $title])
     @yield('css')
     @include('layouts.partials/head-css')
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
     <style>
        
@@ -76,6 +78,7 @@
 
 @vite(['resources/js/app.js'])
 @include("layouts.partials/vendor")
+<script src="https://cdn.plyr.io/3.6.8/plyr.js"></script>
 
 </body>
 </html>

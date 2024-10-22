@@ -28,6 +28,18 @@
                 <p><strong>Category:</strong> {{ $course->category->name }}</p>
                 <p><strong>PDF:</strong> <a href="{{ Storage::url($course->pdf) }}" target="_blank">Download PDF</a></p>
 
+                <!-- MP3 Audio Player -->
+                @if($course->audio)
+                    <p><strong>AudioBook Version:</strong></p>
+                    <audio controls>
+    <source src="{{ asset($course->audio) }}" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+                @else
+                    <p><strong>Audio:</strong> No audio available</p>
+                @endif
+<br>
                 <!-- Back to list -->
                 <a href="{{ route('courses.index') }}" class="btn btn-secondary">Back to Courses</a>
             </div>

@@ -14,6 +14,7 @@ class Course extends Model
         'title',
         'description',
         'pdf',
+        'audio',
         'course_category_id'
     ];
 

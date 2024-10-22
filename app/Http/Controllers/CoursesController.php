@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\CourseCategory;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class CoursesController extends Controller
 {
@@ -24,30 +25,80 @@ class CoursesController extends Controller
     }
 
     // Store a newly created course in storage
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'pdf' => 'required|mimes:pdf|max:10000', // Validate the PDF file
+    //         'course_category_id' => 'required|exists:course_categories,id', // Ensure category exists
+    //     ]);
+
+    //     // Store the uploaded PDF file in the 'courses' directory on the 'public' disk
+    //     $pdfPath = $request->file('pdf')->store('courses', 'public');
+
+    //     // Create the course record
+    //     Course::create([
+    //         'title' => $request->title,
+    //         'description' => $request->description,
+    //         'pdf' => $pdfPath, // Save the path to the database
+    //         'course_category_id' => $request->course_category_id,
+    //     ]);
+
+    //     return redirect()->route('courses.index')->with('success', 'Course created successfully!');
+    // }
+
+    // Display the specified course    
+ 
+
+
     public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'pdf' => 'required|mimes:pdf|max:10000', // Validate the PDF file
-            'course_category_id' => 'required|exists:course_categories,id', // Ensure category exists
+            'pdf' => 'required|mimes:pdf|max:10000', // Validate PDF file
+            'course_category_id' => 'required|exists:course_categories,id',
         ]);
-
-        // Store the uploaded PDF file in the 'courses' directory on the 'public' disk
+    
         $pdfPath = $request->file('pdf')->store('courses', 'public');
-
-        // Create the course record
+        $pdfFullPath = storage_path('app/public/' . $pdfPath);
+    
+        $audioDir = storage_path('app/public/audio');
+    
+        if (!file_exists($audioDir)) {
+            mkdir($audioDir, 0755, true);
+        }
+    
+        $pdfFullPath = str_replace('\\', '/', $pdfFullPath);
+        $audioDir = str_replace('\\', '/', $audioDir);
+    
+        $pythonScriptPath = storage_path('python/convert_pdf_to_audio.py');
+        $pythonScriptPath = str_replace('\\', '/', $pythonScriptPath);
+    
+        $command = "python $pythonScriptPath \"$pdfFullPath\" \"$audioDir\" 2>&1";
+        $output = shell_exec($command);
+    
+        $audioFileName = pathinfo($pdfPath, PATHINFO_FILENAME) . '.mp3';
+        $audioFullPath = storage_path('app/public/audio/' . $audioFileName);
+    
+        if (!file_exists($audioFullPath)) {
+            return back()->with('error', 'Failed to generate audio for the course. Please try again.');
+        }
+    
         Course::create([
             'title' => $request->title,
             'description' => $request->description,
-            'pdf' => $pdfPath, // Save the path to the database
+            'pdf' => $pdfPath,
+            'audio' => 'storage/audio/' . $audioFileName,
             'course_category_id' => $request->course_category_id,
         ]);
-
-        return redirect()->route('courses.index')->with('success', 'Course created successfully!');
+    
+        // Redirect to the courses list page with a success message
+        return redirect()->route('courses.index')->with('success', 'Course created successfully with audio!');
     }
+    
 
-    // Display the specified course
     public function show($id)
     {
         $course = Course::with('category')->findOrFail($id); // Fetch the course along with its category
@@ -111,22 +162,21 @@ class CoursesController extends Controller
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully!');
     }
 
-    // Display courses by category
+    // Display courses by category 
     public function showCoursesByCategory($categoryId = null)
     {
+        // Fetch all categories
         $categories = CourseCategory::all();
     
-        // If no category is selected, default to the "Plants" category
-        if (!$categoryId) {
-            $defaultCategory = CourseCategory::where('name', 'Plants')->first();
-            if ($defaultCategory) {
-                $categoryId = $defaultCategory->id;
-            }
+        // If no category ID is provided, default to the first category
+        if (!$categoryId && $categories->isNotEmpty()) {
+            $categoryId = $categories->first()->id;
         }
     
-        // Get the courses for the selected category
+        // Fetch courses for the selected or default category
         $courses = Course::where('course_category_id', $categoryId)->get();
     
+        // Pass the categories, courses, and selected category to the view
         return view('courses.frontend', [
             'categories' => $categories,
             'courses' => $courses,
@@ -135,7 +185,6 @@ class CoursesController extends Controller
         ]);
     }
     
-
     // Search courses
     public function search(Request $request)
     {

@@ -64,6 +64,18 @@
                     <a href="{{ route('courses.index') }}" class="btn btn-secondary">Cancel</a>
                 </form>
             </div>
+
+            <!-- After the form, display the audio if available -->
+            @if(session('audio'))
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Generated Audio (MP3):</h5>
+                    <audio controls class="w-100">
+                        <source src="{{ Storage::url(session('audio')) }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <a href="{{ Storage::url(session('audio')) }}" class="btn btn-success mt-3">Download MP3</a>
+                </div>
+            @endif
         </div>
     </div>
 </div>

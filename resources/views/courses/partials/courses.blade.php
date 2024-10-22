@@ -1,4 +1,4 @@
-<!-- resources/views/courses/partials/courses.blade.php -->
+<!-- resources/views/courses/partials/courses.blade.php
 @if($courses->count() > 0)
     <div class="row">
         @foreach($courses as $course)
@@ -13,6 +13,6 @@
             </div>
         @endforeach
     </div>
-@else
+@else   
     <p>No courses available for this category.</p>
-@endif
+@endif -->

@@ -21,26 +21,56 @@
     </a>
 </div>
 
-<!-- Grid of courses -->
-<div class="row">
-    @if($courses->count() > 0)
-        @foreach($courses as $course)
-            <div class="col-md-3">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $course->title }}</h5>
-                        <p class="card-text">
-                            {{ Str::limit($course->description, 100) }}
-                        </p>
-                        <div class="d-flex justify-content-between align-items-center">
+<!-- Table of courses -->
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Category</th>
+                <th scope="col">PDF</th>
+                <th scope="col">Audiobook version</th>
+                <th scope="col" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if($courses->count() > 0)
+                @foreach($courses as $index => $course)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $course->title }}</td>
+                        <td>{{ Str::limit($course->description, 50) }}</td>
+                        <td>{{ $course->category->name ?? 'No Category' }}</td>
+                        <td>
+                            @if($course->pdf)
+                                <a href="{{ Storage::url($course->pdf) }}" target="_blank" class="btn btn-success btn-sm">
+                                    <i class="fas fa-file-pdf"></i> View PDF
+                                </a>
+                            @else
+                                <span class="text-muted">No PDF</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($course->audio)
+                            <audio controls class="mt-2 w-100">
+                                            <source src="{{ asset($course->audio) }}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                  @else
+                                <span class="text-muted">No Audio</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
                             <!-- View Course -->
                             <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm" title="View">
-                                <i class="fas fa-eye"></i> View
+                                <i class="fas fa-eye"></i>
                             </a>
 
                             <!-- Edit Course -->
                             <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm" title="Edit">
-                                <i class="fas fa-edit"></i> Edit
+                                <i class="fas fa-edit"></i>
                             </a>
 
                             <!-- Delete Course -->
@@ -48,16 +78,18 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-                                    <i class="fas fa-trash-alt"></i> Delete
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    @else
-        <p class="text-muted">No courses available.</p>
-    @endif
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No courses available.</td>
+                </tr>
+            @endif
+        </tbody>
+    </table>
 </div>
 @endsection

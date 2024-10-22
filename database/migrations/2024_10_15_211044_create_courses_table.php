@@ -17,7 +17,8 @@ return new class extends Migration
         $table->id();
         $table->string('title');                 // Course title
         $table->text('description')->nullable(); // Course description
-        $table->string('pdf');                   // PDF file path
+        $table->string('pdf');   
+        $table->string('audio')->nullable();                // PDF file path
         $table->foreignId('course_category_id')  // Foreign key for the category
               ->constrained('course_categories') // References 'id' on 'course_categories' table
               ->onDelete('cascade');             // Delete courses if the category is deleted
