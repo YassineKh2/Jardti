@@ -3,10 +3,16 @@
 @section('css')
     <!-- Including Flatpickr CSS -->
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <!-- Including Google Maps API -->
+    <style>
+        #map {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
 @endsection
 
 @section('content')
-
 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
     <div class="flex-grow-1">
         <h4 class="fs-18 fw-semibold m-0">Edit Event</h4>
@@ -47,26 +53,11 @@
                                 <textarea class="form-control" id="description" name="description">{{ old('description', $event->description) }}"></textarea>
                             </div>
 
-                            <!-- Location (Dropdown with regions of Tunis) -->
+                            <!-- Google Maps Location -->
                             <div class="mb-3">
                                 <label class="form-label" for="location">Location</label>
-                                <select class="form-control" id="location" name="location" required>
-                                    <option value="" disabled>Select Region</option>
-                                    <option value="Carthage" {{ old('location', $event->location) == 'Carthage' ? 'selected' : '' }}>Carthage</option>
-                                    <option value="La Marsa" {{ old('location', $event->location) == 'La Marsa' ? 'selected' : '' }}>La Marsa</option>
-                                    <option value="Le Kram" {{ old('location', $event->location) == 'Le Kram' ? 'selected' : '' }}>Le Kram</option>
-                                    <option value="Gammarth" {{ old('location', $event->location) == 'Gammarth' ? 'selected' : '' }}>Gammarth</option>
-                                    <option value="Sidi Bou Said" {{ old('location', $event->location) == 'Sidi Bou Said' ? 'selected' : '' }}>Sidi Bou Said</option>
-                                    <option value="Lac 1" {{ old('location', $event->location) == 'Lac 1' ? 'selected' : '' }}>Lac 1</option>
-                                    <option value="Lac 2" {{ old('location', $event->location) == 'Lac 2' ? 'selected' : '' }}>Lac 2</option>
-                                    <option value="Bardo" {{ old('location', $event->location) == 'Bardo' ? 'selected' : '' }}>Bardo</option>
-                                    <option value="Manouba" {{ old('location', $event->location) == 'Manouba' ? 'selected' : '' }}>Manouba</option>
-                                    <option value="Ben Arous" {{ old('location', $event->location) == 'Ben Arous' ? 'selected' : '' }}>Ben Arous</option>
-                                    <option value="El Mourouj" {{ old('location', $event->location) == 'El Mourouj' ? 'selected' : '' }}>El Mourouj</option>
-                                    <option value="Menzah" {{ old('location', $event->location) == 'Menzah' ? 'selected' : '' }}>Menzah</option>
-                                    <option value="Ariana" {{ old('location', $event->location) == 'Ariana' ? 'selected' : '' }}>Ariana</option>
-                                    <option value="La Goulette" {{ old('location', $event->location) == 'La Goulette' ? 'selected' : '' }}>La Goulette</option>
-                                </select>
+                                <input type="text" class="form-control" id="location" name="location" value="{{ old('location', $event->location) }}" readonly>
+                                <div id="map"></div>
                             </div>
 
                             <!-- Category Selection -->
@@ -80,18 +71,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                            </div>
-
-                            <!-- Capacity -->
-                            <div class="mb-3">
-                                <label class="form-label" for="capacity">Capacity</label>
-                                <input type="number" class="form-control" id="capacity" name="capacity" value="{{ old('capacity', $event->capacity) }}">
-                            </div>
-
-                            <!-- Price -->
-                            <div class="mb-3">
-                                <label class="form-label" for="price">Price</label>
-                                <input type="text" class="form-control" id="price" name="price" value="{{ old('price', $event->price) }}">
                             </div>
                         </div>
 
@@ -108,6 +87,18 @@
                                 <input type="text" class="form-control" id="end_date" name="end_date" value="{{ old('end_date', $event->end_date) }}" required>
                             </div>
 
+                            <!-- Capacity -->
+                            <div class="mb-3">
+                                <label class="form-label" for="capacity">Capacity</label>
+                                <input type="number" class="form-control" id="capacity" name="capacity" value="{{ old('capacity', $event->capacity) }}">
+                            </div>
+
+                            <!-- Price -->
+                            <div class="mb-3">
+                                <label class="form-label" for="price">Price</label>
+                                <input type="text" class="form-control" id="price" name="price" value="{{ old('price', $event->price) }}">
+                            </div>
+
                             <!-- Image Upload -->
                             <div class="mb-3">
                                 <label class="form-label" for="image">Event Image</label>
@@ -119,7 +110,7 @@
                         </div>
                     </div>
 
-                    <!-- Align the button to the right -->
+                    <!-- Align button to the right -->
                     <div class="text-end">
                         <button type="submit" class="btn btn-primary">Update Event</button>
                     </div>
@@ -133,20 +124,74 @@
 @section('script')
     <!-- Including Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Google Maps JavaScript API -->
+    <script src="https://maps.gomaps.pro/maps/api/js?key=AlzaSy88W2br6XrFHsW2FPn7hoDk9emOBtvu96U&libraries=places"></script>
 
     <script>
         // Initialize Flatpickr for Start Date
         flatpickr("#start_date", {
             enableTime: true,
-            dateFormat: "Y-m-d H:i", // Format to display date and time
-            minDate: "today", // Minimum date is today to prevent past date selection
+            dateFormat: "Y-m-d H:i", 
+            minDate: "today",
         });
 
         // Initialize Flatpickr for End Date
         flatpickr("#end_date", {
             enableTime: true,
-            dateFormat: "Y-m-d H:i", // Format to display date and time
-            minDate: "today", // Minimum date is today to prevent past date selection
+            dateFormat: "Y-m-d H:i", 
+            minDate: "today",
         });
+
+        // Google Maps Initialization
+        function initMap() {
+            var eventLocation = { lat: 36.8065, lng: 10.1815 }; // Example coordinates (replace with actual event location)
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: eventLocation,
+                zoom: 13
+            });
+
+            var marker = new google.maps.Marker({
+                position: eventLocation,
+                map: map
+            });
+
+            var input = document.getElementById('location');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.bindTo('bounds', map);
+
+            autocomplete.addListener('place_changed', function () {
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    return;
+                }
+
+                // Place the marker at the selected location
+                marker.setPosition(place.geometry.location);
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+
+                // Update the location input field with the address
+                document.getElementById('location').value = place.formatted_address;
+            });
+
+            // Enable marker dragging to update the location
+            map.addListener('click', function(event) {
+                marker.setPosition(event.latLng);
+                map.setCenter(event.latLng);
+
+                // Optional: reverse geocode to get the address
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({'location': event.latLng}, function(results, status) {
+                    if (status === 'OK' && results[0]) {
+                        document.getElementById('location').value = results[0].formatted_address;
+                    }
+                });
+            });
+        }
+
+        // Load the map on page load
+        google.maps.event.addDomListener(window, 'load', initMap);
     </script>
 @endsection

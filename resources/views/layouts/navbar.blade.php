@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @include('layouts.partials/title-meta', ['title' => $title])
+    @include('layouts.partials/title-meta', ['title' => $title ?? 'Default Title'])
     @yield('css')
     @include('layouts.partials/head-css')
 
     <style>
-        /* Define the custom layout without using the .content-page */
         .custom-layout {
             width: 100%;
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden; 
         }
 
         .custom-content {
@@ -24,9 +23,13 @@
 
         .navbar-custom {
             margin-bottom: 20px;
+            position: -webkit-sticky; /* For Safari */
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Ensure it stays on top of content */
+            background-color: #f8f9fa; /* Ensure the background stays visible when sticky */
         }
 
-        /* Ensure no extra padding/margin in the container */
         .container-fluid {
             padding-left: 0 !important;
             padding-right: 0 !important;
@@ -37,7 +40,7 @@
     </style>
 </head>
 
-<body data-menu-color="light" data-sidebar="default" @yield('body') >
+<body data-menu-color="light" data-sidebar="default" @yield('body')>
 
 <div class="custom-layout">
     <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom">
@@ -60,7 +63,6 @@
         </div>
     </nav>
 
-    
     <div class="custom-content">
         <div class="container-fluid">
             @yield('content')

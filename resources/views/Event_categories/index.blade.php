@@ -24,14 +24,16 @@
             <li class="breadcrumb-item active">Event Categories</li>
         </ol>
     </div>
-
-    <!-- Create Event Category Button -->
-    <div class="d-flex justify-content-end mb-3">
-        <a href="{{ route('event-categories.create') }}" class="btn btn-primary">
-            <i data-feather="plus"></i> Create Event Category
-        </a>
-    </div>
 </div>
+
+<!-- Moved the button below the breadcrumb -->
+<div class="d-flex justify-content-end mb-3 mt-2">
+    <a href="{{ route('event-categories.create') }}" class="btn btn-info">
+        <i class="mdi mdi-plus "></i> Create Event Category
+    </a>
+</div>
+
+
 
 <!-- Table-based Category Listing with Image Column -->
 <div class="row">

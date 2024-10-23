@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\EventCategory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 
 class EventController extends Controller
 {
@@ -15,9 +18,64 @@ class EventController extends Controller
      */
     public function index()
     {
+        // Get all events
         $events = Event::all();
-        return view('Events.event', compact('events'));
+    
+        // Get the count of events grouped by category
+        $eventsByCategory = Event::select('category_id')
+            ->with('category')  
+            ->groupBy('category_id')
+            ->selectRaw('count(*) as total, category_id')
+            ->get();
+    
+        // Get the current month and calculate events for the current month
+        $currentMonth = now()->month;
+        $eventsThisMonth = Event::whereMonth('start_date', $currentMonth)->count();
+    
+        // Get the number of events for each month during the current year
+        $eventsPerMonth = Event::selectRaw('MONTH(start_date) as month, COUNT(*) as total')
+            ->whereYear('start_date', now()->year)  // Filter events for the current year
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->pluck('total', 'month')
+            ->toArray();
+    
+        // Fill missing months with 0 events
+        $eventsThisYear = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $eventsThisYear[$i] = $eventsPerMonth[$i] ?? 0;
+        }
+    
+        // Pass events, events by category, events this month, and events this year to the view
+        return view('Events.event', compact('events', 'eventsByCategory', 'eventsThisMonth', 'eventsThisYear'));
     }
+    
+   
+
+    public function showEventsFront(Request $request)
+{
+    // Tous les événements pour la carte
+    $events = Event::all();
+
+    // Paginé pour la tab "All"
+    $paginatedEvents = Event::paginate(3);
+
+    // Paginé pour chaque catégorie
+    $eventCategories = EventCategory::all()->map(function($category) {
+        $category->eventsPaginated = $category->events()->paginate(3); // Paginé les événements par catégorie
+        return $category;
+    });
+
+    return view('Events.eventsFront', compact('events', 'paginatedEvents', 'eventCategories'));
+}
+  
+    
+
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -175,13 +233,92 @@ class EventController extends Controller
 
 public function showTimeLine()
 {
-    // Fetch events with all the necessary data for the timeline
     $events = Event::select('name', 'description', 'start_date', 'end_date')
                    ->orderBy('start_date', 'asc') // Ensure events are ordered by start date
                    ->get();
 
     return view('Events.eventTimeline', compact('events'));
 }
+
+
+public function exportEvents()
+{
+    $events = \App\Models\Event::all();
+
+    // Create a new Spreadsheet object
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    $sheet->setCellValue('A1', 'ID');
+    $sheet->setCellValue('B1', 'Name');
+    $sheet->setCellValue('C1', 'Description');
+    $sheet->setCellValue('D1', 'Location');
+    $sheet->setCellValue('E1', 'Start Date');
+    $sheet->setCellValue('F1', 'End Date');
+    $sheet->setCellValue('G1', 'Capacity');
+    $sheet->setCellValue('H1', 'Price');
+
+   
+    $row = 2; 
+    foreach ($events as $event) {
+        $sheet->setCellValue('A' . $row, $event->id);
+        $sheet->setCellValue('B' . $row, $event->name);
+        $sheet->setCellValue('C' . $row, $event->description);
+        $sheet->setCellValue('D' . $row, $event->location);
+        $sheet->setCellValue('E' . $row, $event->start_date);
+        $sheet->setCellValue('F' . $row, $event->end_date);
+        $sheet->setCellValue('G' . $row, $event->capacity);
+        $sheet->setCellValue('H' . $row, $event->price);
+        $row++;
+    }
+
+    
+    $writer = new Xlsx($spreadsheet);
+
+   
+    $fileName = 'events.xlsx';
+
+   
+    $tempFilePath = tempnam(sys_get_temp_dir(), $fileName);
+    
+    $writer->save($tempFilePath);
+
+    
+    return response()->download($tempFilePath, $fileName)->deleteFileAfterSend(true);
+}
+
+public function searchByDate(Request $request)
+{
+    // Validate input dates
+    $validated = $request->validate([
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+    ]);
+
+    // Fetch events based on the date range
+    $startDate = $request->start_date;
+    $endDate = $request->end_date;
+
+    $events = Event::whereBetween('start_date', [$startDate, $endDate])
+                   ->orWhereBetween('end_date', [$startDate, $endDate])
+                   ->get();
+
+    // Log the events to check if the filtering works
+    \Log::info('Filtered Events: ', $events->toArray());
+
+    // Return the events as a JSON response
+    return response()->json($events);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

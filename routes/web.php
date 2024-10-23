@@ -43,9 +43,14 @@ Route::resource('/back/events', EventController::class);
 Route::get('/back/calendar', [EventController::class, 'showCalendar'])->name('calendar');
 Route::get('/event/timeline', [EventController::class, 'showTimeline'])->name('timelineEvent');
 Route::resource('/back/event-categories', EventCategoryController::class);
-Route::get('/events', function () {
-    return view('Events.eventsFront', ['title' => 'Events']);
-})->name('eventsFront');
+Route::get('/events', [EventCategoryController::class, 'showCategories'])->name('eventsFront');
+Route::get('/events', [EventController::class, 'showEventsFront'])->name('eventsFront');
+Route::get('/export-events', [EventController::class, 'exportEvents']);
+// Add this route for search by date
+Route::get('/events/search-by-date', [EventController::class, 'searchByDate'])->name('events.searchByDate');
+
+
+
 // --------------------- tasks  Routes --------------------- //
 
 Route::resource('tasks', TaskController::class);

@@ -13,6 +13,16 @@ class EventCategoryController extends Controller
         return view('Event_categories.index', compact('eventCategories'));  // Event Category Views
     }
 
+    
+
+    public function showCategories()
+    {
+        $eventCategories = EventCategory::all();  // Event Category Model
+        return view('Events.eventsFront', compact('eventCategories'));  // Event Category Views
+    }
+    
+    
+
     public function create()
     {
         return view('Event_categories.create');  // Event Category Views
