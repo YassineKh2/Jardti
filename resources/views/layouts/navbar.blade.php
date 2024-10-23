@@ -59,6 +59,7 @@
                 <a class="nav-link">Tasks</a>
                 <a class="nav-link">Forum</a>
                 <a class="nav-link">Trading</a>
+                <a href="/courses" class="nav-link">Courses</a>
                 <a class="nav-link" href="{{ route('eventsFront') }}">Events</a>
  
                 </div>
@@ -67,7 +68,9 @@
         </div>
     </nav>
 
-
+    <div class="custom-content">
+        <div class="container-fluid">
+            @yield('content')
         </div>
     </div>
 
