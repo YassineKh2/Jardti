@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="../../scss/navbar.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- 3 lines above might cause problem -->
+ 
 
 </head>
 
@@ -59,7 +59,6 @@
                 <a class="nav-link">Tasks</a>
                 <a class="nav-link">Forum</a>
                 <a class="nav-link">Trading</a>
-                <a href="/courses" class="nav-link">Courses</a>
                 <a class="nav-link" href="{{ route('eventsFront') }}">Events</a>
             </div>
             
