@@ -7,6 +7,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TaskController;
 
 use \App\Http\Controllers\PointsController;
+
+use \App\Http\Controllers\CourseCategoriesController;
+use \App\Http\Controllers\CoursesController;
+
 use \App\Http\Controllers\ItemController;
 
 
@@ -70,4 +74,21 @@ Route::resource('/back/shop/items', ItemController::class);
 
 
 
+
+// Resource route for Course Categories
+
+Route::resource('/back/course-categories', CourseCategoriesController::class);
+Route::resource('/back/courses', CoursesController::class);
+Route::get('/courses/by-category/{id}', [CoursesController::class, 'getCoursesByCategory']);
+//Route::get('/courses/category/{id}', [CoursesController::class, 'showCoursesByCategory'])->name('courses.byCategory');
+Route::get('/courses/search', [CoursesController::class, 'search'])->name('courses.search');
+Route::get('/courses/{categoryId?}', [CoursesController::class, 'showCoursesByCategory'])->name('courses.byCategory');
+
+Route::get('/courses', function () {
+    $categories = \App\Models\CourseCategory::all();
+    return view('courses.frontend', [
+        'categories' => $categories,
+        'title' => 'Courses'  // Pass the title here
+    ]);
+});
 

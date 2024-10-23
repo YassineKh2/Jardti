@@ -173,6 +173,7 @@
                         <span> Calendar </span>
                     </a>
                 </li>
+                 
 
 
                 <li>
@@ -193,7 +194,27 @@
                     </div>
                 </li>
 
+                <li>
+    <a href="#sidebarCourses" data-bs-toggle="collapse">
+        <i data-feather="book"></i> <!-- Assuming "book" icon for courses -->
+        <span> Courses </span>
+        <span class="menu-arrow"></span>
+    </a>
+    <div class="collapse" id="sidebarCourses">
+        <ul class="nav-second-level">
+            <!-- Link to Course Categories -->
+            <li>
+                <a href="/back/course-categories" class="tp-link">Course Categories</a>
+            </li>
+            <!-- Link to Courses -->
+            <li>
+                <a href="/back/courses" class="tp-link">Courses</a>
+            </li>
+        </ul>
+    </div>
+</li>
 
+                
                 <li class="menu-title mt-2">General</li>
 
                 <li>
