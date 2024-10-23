@@ -144,17 +144,13 @@
                             <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
                                 <div class="pagination loop-pagination d-flex justify-content-center">
                                     <a href="#" class="pagination-arrow d-flex align-items-center">
-                                        <i class="icon icon-arrow-left"></i>
+                                        <a href="{{ $Items->previousPageUrl() }}" class="icon icon-arrow-left"></a>
                                     </a>
-                                    <span aria-current="page" class="page-numbers current">1</span>
-                                    <a class="page-numbers" href="#">2</a>
-                                    <a class="page-numbers" href="#">3</a>
                                     <a href="#" class="pagination-arrow d-flex align-items-center">
-                                        <i class="icon icon-arrow-right"></i>
+                                        <a href="{{ $Items->nextPageUrl() }}" class="icon icon-arrow-right"></a>
                                     </a>
                                 </div>
                             </nav>
-
                         </div>
                     </div>
                 </section>

@@ -28,12 +28,13 @@
 
             <!-- Collapsible navbar content -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="d-flex  ms-auto">
+                <div class="d-flex gap-3  ms-auto">
                     <!-- Text in the center -->
                     <a href="/" class="nav-link">Home</a>
                     <a href="#" class="nav-link">Shop</a>
                     <a href="#" class="nav-link">Tasks</a>
                     <a href="#" class="nav-link">Forum</a>
+                    <a href="/mypoints" class="nav-link">My Points</a>
                     <a href="#" class="nav-link">Trading</a>
                 </div>
                 <!-- Button on the right -->
