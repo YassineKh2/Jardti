@@ -55,10 +55,10 @@
                         <td>
                             @if($course->audio)
                             <audio controls class="mt-2 w-100">
-                                            <source src="{{ asset($course->audio) }}" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
-                                  @else
+                                <source src="{{ asset($course->audio) }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            @else
                                 <span class="text-muted">No Audio</span>
                             @endif
                         </td>
@@ -92,4 +92,72 @@
         </tbody>
     </table>
 </div>
+
+<!-- Pie Chart for Course Categories -->
+<div class="my-5">
+    <h5 class="text-center">Course Distribution by Category</h5>
+    <canvas id="categoryChart" style="max-width: 600px; margin: 0 auto;"></canvas>
+</div>
+ <!-- Load Chart.js and the Chart.js Data Labels Plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('categoryChart').getContext('2d');
+        const categoryChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {!! json_encode($chartData['labels']) !!}, // Category names
+                datasets: [{
+                    data: {!! json_encode($chartData['data']) !!},  // Number of courses per category
+                    backgroundColor: ['#36A2EB', '#4BC0C0', '#FF6384', '#FFCE56', '#9966FF'], // Custom color order
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                const label = tooltipItem.label || '';
+                                const dataset = tooltipItem.dataset;
+                                const total = dataset.data.reduce((accumulator, value) => accumulator + value, 0);
+                                const currentValue = dataset.data[tooltipItem.dataIndex];
+                                const percentage = ((currentValue / total) * 100).toFixed(2); // Calculate percentage
+
+                                return `${label}: ${currentValue} (${percentage}%)`; // Show percentage in tooltip
+                            }
+                        }
+                    },
+                    // Plugin to show percentage directly on the pie chart slices
+                    datalabels: {
+                        display: true, // Ensure the labels are displayed
+                        color: '#fff', // Label text color
+                        align: 'center', // Align the labels to the center of the slice
+                        anchor: 'center', // Anchor the labels to the center of the slice
+                        formatter: function(value, context) {
+    const total = context.chart.data.datasets[0].data.reduce((accumulator, value) => accumulator + value, 0);
+    const percentage = ((value / total) * 100).toFixed(2);
+
+    return value > 0 ? `${percentage}%` : ''; // Only display percentage if greater than 0
+},
+
+                        font: {
+                            size: 14, // Font size
+                            weight: 'bold'
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // Load the Data Labels plugin
+        });
+    });
+</script>
+
+
+
 @endsection

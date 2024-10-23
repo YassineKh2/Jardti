@@ -53,8 +53,86 @@
                 </div>
             </div>
         @endforeach
+        
     @else
         <p class="text-muted">No categories available.</p>
     @endif
+    <div class="mt-5 d-flex justify-content-center">
+    <h5 class="text-center">Category Distribution</h5>
+    <div style="max-width: 400px; max-height: 400px;"> <!-- Limit the size of the chart -->
+        <canvas id="categoryChart"></canvas>
+    </div>
+</div>
+</div>
+
+<!-- Pie Chart for Categories -->
+<div class="mt-5">
+    <h5 class="text-center">Category Distribution</h5>
+    <canvas id="categoryChart"></canvas>
 </div>
 @endsection
+<!-- Pie Chart for Categories -->
+
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('categoryChart').getContext('2d');
+        const categoryChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {!! json_encode($chartData['labels']) !!}, // Category names
+                datasets: [{
+                    data: {!! json_encode($chartData['data']) !!},  // Number of courses per category
+                    backgroundColor: ['#36A2EB', '#4BC0C0',  '#FFCE56', '#FF6384'], // Custom color order
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Disable maintaining the aspect ratio
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                const label = tooltipItem.label || '';
+                                const dataset = tooltipItem.dataset;
+                                const total = dataset.data.reduce((accumulator, value) => accumulator + value, 0);
+                                const currentValue = dataset.data[tooltipItem.dataIndex];
+                                const percentage = ((currentValue / total) * 100).toFixed(2); // Calculate percentage
+
+                                return `${label}: ${currentValue} (${percentage}%)`; // Show percentage in tooltip
+                            }
+                        }
+                    },
+                    datalabels: {
+                        display: true, // Ensure the labels are displayed
+                        color: '#fff', // Label text color
+                        align: 'center', // Align the labels to the center of the slice
+                        anchor: 'center', // Anchor the labels to the center of the slice
+                        formatter: function(value, context) {
+                            const total = context.chart.data.datasets[0].data.reduce((accumulator, value) => accumulator + value, 0);
+                            const percentage = ((value / total) * 100).toFixed(2);
+                            
+                            return value > 0 ? `${percentage}%` : ''; // Display percentage only if value is greater than 0
+                        },
+                        font: {
+                            size: 14, // Font size
+                            weight: 'bold'
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // Load the Data Labels plugin
+        });
+    });
+</script>
+
+ 
+
+ 

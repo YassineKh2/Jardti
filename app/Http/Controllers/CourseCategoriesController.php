@@ -11,9 +11,26 @@ class CourseCategoriesController extends Controller
     // Display a listing of the categories
     public function index()
     {
-        $categories = CourseCategory::all();
-        return view('categories.index', compact('categories'));
+        // Fetch categories with their course count
+        $categories = CourseCategory::withCount('courses')->get();
+    
+        // Filter out categories with 0 courses
+        $filteredCategories = $categories->filter(function($category) {
+            return $category->courses_count > 0;
+        });
+    
+        // Prepare chart data for categories with courses
+        $chartData = [
+            'labels' => $filteredCategories->pluck('name')->toArray(), // Only categories with courses
+            'data' => $filteredCategories->pluck('courses_count')->toArray(), // Only course counts > 0
+        ];
+    
+        // Pass both the categories and chart data to the view
+        return view('categories.index', compact('categories', 'chartData'));
     }
+    
+    
+
 
     // Show the form for creating a new category
     public function create()

@@ -11,11 +11,25 @@ use Illuminate\Support\Facades\Log;
 class CoursesController extends Controller
 {
     // Display a listing of the courses
-    public function index()
-    {
-        $courses = Course::with('category')->get(); // Fetch all courses with their associated categories
-        return view('courses.index', compact('courses'));
-    }
+    // public function index()
+    // {
+    //     $courses = Course::with('category')->get(); // Fetch all courses with their associated categories
+    //     return view('courses.index', compact('courses'));
+    // }
+// Controller function
+public function index()
+{
+    $courses = Course::all();
+    $categories = CourseCategory::withCount('courses')->get(); // Get count of courses per category
+    
+    // Prepare data for the pie chart
+    $chartData = [
+        'labels' => $categories->pluck('name'), // Category names
+        'data' => $categories->pluck('courses_count'), // Number of courses in each category
+    ];
+
+    return view('courses.index', compact('courses', 'chartData'));
+}
 
     // Show the form for creating a new course
     public function create()
@@ -162,21 +176,19 @@ class CoursesController extends Controller
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully!');
     }
 
-    // Display courses by category 
+    // Display courses by category  
     public function showCoursesByCategory($categoryId = null)
     {
-        // Fetch all categories
         $categories = CourseCategory::all();
     
-        // If no category ID is provided, default to the first category
-        if (!$categoryId && $categories->isNotEmpty()) {
-            $categoryId = $categories->first()->id;
+        // Default to first category if none selected
+        if (!$categoryId) {
+            $categoryId = CourseCategory::first()->id;
         }
     
-        // Fetch courses for the selected or default category
-        $courses = Course::where('course_category_id', $categoryId)->get();
+        // Use paginate instead of get()
+        $courses = Course::where('course_category_id', $categoryId)->paginate(3); // 6 courses per page
     
-        // Pass the categories, courses, and selected category to the view
         return view('courses.frontend', [
             'categories' => $categories,
             'courses' => $courses,
@@ -185,25 +197,25 @@ class CoursesController extends Controller
         ]);
     }
     
+
+    
     // Search courses
     public function search(Request $request)
     {
-        // Get the search query from the form input
         $query = $request->input('query');
-
-        // Fetch courses that match the search query
+    
+        // Fetch courses that match the search query and paginate the results
         $courses = Course::where('title', 'like', '%' . $query . '%')
                          ->orWhere('description', 'like', '%' . $query . '%')
-                         ->get();
-
-        // Fetch all categories
+                         ->paginate(6); // Paginate search results
+    
         $categories = CourseCategory::all();
-
-        // Return the view with the search results
+    
         return view('courses.frontend', [
             'categories' => $categories,
             'courses' => $courses,
             'title' => 'Search Results for: ' . $query
         ]);
     }
+    
 }
