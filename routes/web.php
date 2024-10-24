@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCategoryController;
@@ -15,6 +17,7 @@ use \App\Http\Controllers\ItemController;
 use App\Http\Controllers\CourseCategoriesController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Product;
 
 
 /*
@@ -28,9 +31,36 @@ use App\Http\Controllers\ProfileController;
 |
 */
 
+
+
+// ---------------------  General Routes --------------------- //
+
+
+
+// Route::get('/', function () {
+//     return redirect()->route('products.index');
+// });
+
+// Routes pour la gestion des produits (CRUD complet avec ProductController)
+Route::resource('products', ProductController::class);
+Route::resource('orders', OrderController::class)->middleware('auth');
+Route::get('/Client/ProductsList', [ProductController::class, 'productsList'])->name('FrontOffice.productsList');
+Route::post('/cart/add/{productId}', [OrderController::class, 'addToCart'])->name('cart.add')->middleware('auth');
+Route::get('/cart', [OrderController::class, 'showCart'])->name('order.showcart')->middleware('auth');
+Route::delete('/cart/{product}', [OrderController::class, 'removeProduct'])->name('cart.remove')->middleware('auth');
+Route::post('/order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.updateStatus')->middleware('auth');
+Route::get('/api/cart-count', [OrderController::class, 'getCartCount'])->middleware('auth');
+Route::get('/products/category/{category}', [ProductController::class, 'getProductsByCategory'])->middleware('auth');
+Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+Route::get('/statistics/products', [ProductController::class, 'ProductStats'])->name('statistics.products')->middleware('auth');
+Route::get('/statistics/orders/{period?}', [OrderController::class, 'OrdersStats'])->name('statistics.orders')->middleware('auth');
+
 Route::get('/', function () {
     return view('indexFront');
 });
+
+
+
 
 Route::get('/back', function () {
     return view('index');

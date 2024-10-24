@@ -42,8 +42,31 @@
                             <li>
                                 <a href="#" class="tp-link">E-commerce</a>
                             </li>
+                            <li>
+                                <a href="/statistics/products" class="tp-link">Products Stats</a>
+                            </li>
+                            <li>
+                                <a href="/statistics/orders" class="tp-link">Orders Stats</a>
+                            </li>
                         </ul>
                     </div>
+                </li>
+
+                <li>
+                    <a href="/products">
+                        <i data-feather="archive"></i>
+                        <span> Products </span>
+
+                    </a>
+
+                </li>
+                <li>
+                    <a href="/orders">
+                        <i data-feather="shopping-cart"></i>
+                        <span> Orders </span>
+
+                    </a>
+
                 </li>
 
                 <li>
