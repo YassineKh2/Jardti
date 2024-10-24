@@ -23,6 +23,9 @@ class User extends Authenticatable
         'password',
     ];
 
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -41,4 +44,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+
+
+    public function plants()
+{
+    return $this->hasMany(Plant::class);
+}
+
+public function tasks()
+{
+    return $this->hasMany(Task::class);
+}
+
+
 }

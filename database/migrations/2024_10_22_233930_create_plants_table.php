@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('plants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('image');
             $table->text('description')->nullable();
-            $table->enum('status', ['pending', 'completed'])->default('pending'); // Enum with default value
-            $table->date('dueDate');
+            $table->enum('category', ['Vegetables', 'Fruits', 'Flowers', 'Herbs'])->default('Vegetables');
             $table->timestamps();
         });
+        
     }
 
     /**
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('plants');
     }
 };

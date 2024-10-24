@@ -1,0 +1,56 @@
+:root {
+    --bg-color: #f5f5dc; /* Beige background */
+    --light-green: #d9f7be; /* Light green for the filter area */
+    --dark-green: #3f6f3f; /* Dark green for accents */
+    --light-brown: #d8c0b2; /* Light brown for card header */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Shadow color for elements */
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.card-header {
+    background-color: var(--light-brown);
+    color: white;
+}
+
+.filter-container {
+    background-color: var(--light-green);
+    border: 1px solid var(--dark-green);
+}
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0 15px;
+}
+
+.table th,
+.table td {
+    border: none;
+    padding: 12px;
+    background-color: white;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--light-green);
+}
+
+.btn-success {
+    background-color: var(--dark-green);
+    border-color: var(--dark-green);
+}
+
+.btn-success:hover {
+    background-color: #3c8f3c;
+}
+
+.badge {
+    border-radius: 5px;
+}
