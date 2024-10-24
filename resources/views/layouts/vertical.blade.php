@@ -4,6 +4,11 @@
     @include('layouts.partials/title-meta', ['title' => $title])
     @yield('css')
     @include('layouts.partials/head-css')
+    <!-- Add Chart.js from CDN before your script -->
+ 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body data-menu-color="light" data-sidebar="default" @yield('body') >
@@ -28,6 +33,10 @@
 
 @vite(['resources/js/app.js'])
 @include("layouts.partials/vendor")
-
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 </body>
 </html>
+

@@ -128,7 +128,8 @@
                     </div>
                 </li>
 
-                <li>
+              
+                  <li>
                     <a href="#sidebarExpages" data-bs-toggle="collapse">
                         <i data-feather="file-text"></i>
                         <span> Utility </span>
@@ -166,13 +167,36 @@
                         </ul>
                     </div>
                 </li>
-
                 <li>
-                    <a href="#" class="tp-link">
+    <a href="#sidebarEvents" data-bs-toggle="collapse">
+        <i data-feather="calendar"></i>
+        <span> Events </span>
+        <span class="menu-arrow"></span>
+    </a>
+    <div class="collapse" id="sidebarEvents">
+        <ul class="nav-second-level">
+            <li>
+            <a class="tp-link" href="{{ route('events.index') }}">All Events</a>
+            </li>
+            <li>
+                <a class="tp-link" href="{{ route('events.create') }}">Create Event</a>
+            </li>
+           
+            <li>
+            <a class="tp-link" href="{{ route('event-categories.index') }}">Event Categories</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+                
+                <li>
+                    <a href="{{ route('calendar') }}" class="tp-link">
                         <i data-feather="calendar"></i>
                         <span> Calendar </span>
                     </a>
                 </li>
+                 
 
 
                 <li>
@@ -193,7 +217,27 @@
                     </div>
                 </li>
 
+                <li>
+    <a href="#sidebarCourses" data-bs-toggle="collapse">
+        <i data-feather="book"></i> <!-- Assuming "book" icon for courses -->
+        <span> Courses </span>
+        <span class="menu-arrow"></span>
+    </a>
+    <div class="collapse" id="sidebarCourses">
+        <ul class="nav-second-level">
+            <!-- Link to Course Categories -->
+            <li>
+                <a href="/back/course-categories" class="tp-link">Course Categories</a>
+            </li>
+            <!-- Link to Courses -->
+            <li>
+                <a href="/back/courses" class="tp-link">Courses</a>
+            </li>
+        </ul>
+    </div>
+</li>
 
+                
                 <li class="menu-title mt-2">General</li>
 
                 <li>

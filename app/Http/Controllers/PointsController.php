@@ -16,7 +16,7 @@ class PointsController extends Controller
     public function index()
     {
         $Categories = Category::all();
-        $Items = Item::all();
+        $Items = Item::paginate(5);
         $Active = 0;
         return view('Shop.Frontend.index',compact('Categories','Items','Active'));
 
@@ -100,14 +100,18 @@ class PointsController extends Controller
      */
     public function FilterByCategory($id)
     {
-        if($id==0){
+        if($id == 0){
             return redirect()->route('mypoints.index');
         }
-        $Items = Item::all()->where('category_id',$id);
+
+        $Items = Item::where('category_id', $id)->paginate(5);
+
         $Categories = Category::all();
         $Active = $id;
-        return view('Shop.Frontend.index',compact('Categories','Items','Active'));
+
+        return view('Shop.Frontend.index', compact('Categories', 'Items', 'Active'));
     }
+
 
 
 }
