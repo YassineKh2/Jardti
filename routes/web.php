@@ -5,15 +5,11 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TaskController;
-
-use \App\Http\Controllers\PointsController;
-
-use \App\Http\Controllers\CourseCategoriesController;
-use \App\Http\Controllers\CoursesController;
-
-use \App\Http\Controllers\ItemController;
-
-
+use App\Http\Controllers\PointsController;
+use App\Http\Controllers\CourseCategoriesController;
+use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,66 +17,50 @@ use \App\Http\Controllers\ItemController;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
-
-
-
-// ---------------------  General Routes --------------------- //
-
-
 
 Route::get('/', function () {
     return view('indexFront');
 });
 
-
-
 Route::get('/back', function () {
     return view('index');
+})->middleware('auth');
+
+// --------------------- Event Routes --------------------- //
+Route::middleware('auth')->group(function () {
+    Route::resource('/back/events', EventController::class);
+    Route::get('/back/calendar', [EventController::class, 'showCalendar'])->name('calendar');
+    Route::get('/event/timeline', [EventController::class, 'showTimeline'])->name('timelineEvent');
+    Route::resource('/back/event-categories', EventCategoryController::class);
 });
 
-// ---------------------  Event Routes --------------------- //
-Route::resource('/back/events', EventController::class);
-Route::get('/back/calendar', [EventController::class, 'showCalendar'])->name('calendar');
-Route::get('/event/timeline', [EventController::class, 'showTimeline'])->name('timelineEvent');
-Route::resource('/back/event-categories', EventCategoryController::class);
+// Frontend Event View
 Route::get('/events', function () {
     return view('Events.eventsFront', ['title' => 'Events']);
 })->name('eventsFront');
-// --------------------- tasks  Routes --------------------- //
 
-Route::resource('tasks', TaskController::class);
-
-
-// ---------------------  General Routes --------------------- //
-
-
-
+// --------------------- Tasks Routes --------------------- //
+Route::resource('tasks', TaskController::class)->middleware('auth');
 
 // --------------------- Gamification Shop Routes --------------------- //
+Route::middleware('auth')->group(function () {
+    Route::resource('/mypoints', PointsController::class);
+    Route::get('/mypoints/filter/{id}', [PointsController::class, 'FilterByCategory'])->name('mypoints.filter');
+    Route::resource('/back/shop/categories', CategoryController::class);
+    Route::resource('/back/shop/items', ItemController::class);
+});
 
-Route::resource('/mypoints', PointsController::class);
-Route::get('/mypoints/filter/{id}', [PointsController::class,'FilterByCategory'])->name('mypoints.filter');
+// --------------------- Course Routes --------------------- //
+Route::middleware('auth')->group(function () {
+    Route::resource('/back/course-categories', CourseCategoriesController::class);
+    Route::resource('/back/courses', CoursesController::class);
+});
 
-Route::resource('/back/shop/categories', CategoryController::class);
-
-
-Route::resource('/back/shop/items', ItemController::class);
-
-// --------------------- Gamification Shop Routes --------------------- //
-
-
-
-
-// Resource route for Course Categories
-
-Route::resource('/back/course-categories', CourseCategoriesController::class);
-Route::resource('/back/courses', CoursesController::class);
 Route::get('/courses/by-category/{id}', [CoursesController::class, 'getCoursesByCategory']);
-//Route::get('/courses/category/{id}', [CoursesController::class, 'showCoursesByCategory'])->name('courses.byCategory');
 Route::get('/courses/search', [CoursesController::class, 'search'])->name('courses.search');
 Route::get('/courses/{categoryId?}', [CoursesController::class, 'showCoursesByCategory'])->name('courses.byCategory');
 
@@ -92,3 +72,16 @@ Route::get('/courses', function () {
     ]);
 });
 
+// --------------------- Dashboard & Profile Routes --------------------- //
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Auth Routes
+require __DIR__.'/auth.php';
