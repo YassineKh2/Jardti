@@ -163,7 +163,14 @@ img.plant-image {
                         </li>
                     </ul>
                     <!-- Button on the right -->
-                    <button class="btn btn-success ms-lg-5 ms-3" type="button">Get Started</button>
+                    @if(auth()->check())
+                        <span class="navbar-text me-3">
+                    Welcome, {{ auth()->user()->name }}!
+                </span>
+                        <a href="/logout" class="btn btn-outline-danger">Logout</a>
+                    @else
+                        <a href="/login" class="btn btn-success ms-3" type="button">Get Started</a>
+                    @endif
                 </div>
             </div>
         </nav>
