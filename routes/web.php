@@ -12,9 +12,6 @@ use App\Http\Controllers\CourseCategoriesController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
-use \App\Http\Controllers\CategoryController;
-use \App\Http\Controllers\PointsController;
-use \App\Http\Controllers\ItemController;
 use App\Models\Product;
 
 /*
@@ -40,17 +37,17 @@ use App\Models\Product;
 
 // Routes pour la gestion des produits (CRUD complet avec ProductController)
 Route::resource('products', ProductController::class);
-Route::resource('orders', OrderController::class);
+Route::resource('orders', OrderController::class)->middleware('auth');
 Route::get('/Client/ProductsList', [ProductController::class, 'productsList'])->name('FrontOffice.productsList');
-Route::post('/cart/add/{productId}', [OrderController::class, 'addToCart'])->name('cart.add');
-Route::get('/cart', [OrderController::class, 'showCart'])->name('order.showcart');
-Route::delete('/cart/{product}', [OrderController::class, 'removeProduct'])->name('cart.remove');
-Route::post('/order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
-Route::get('/api/cart-count', [OrderController::class, 'getCartCount']);
-Route::get('/products/category/{category}', [ProductController::class, 'getProductsByCategory']);
+Route::post('/cart/add/{productId}', [OrderController::class, 'addToCart'])->name('cart.add')->middleware('auth');
+Route::get('/cart', [OrderController::class, 'showCart'])->name('order.showcart')->middleware('auth');
+Route::delete('/cart/{product}', [OrderController::class, 'removeProduct'])->name('cart.remove')->middleware('auth');
+Route::post('/order/{id}/update-status', [OrderController::class, 'updateStatus'])->name('order.updateStatus')->middleware('auth');
+Route::get('/api/cart-count', [OrderController::class, 'getCartCount'])->middleware('auth');
+Route::get('/products/category/{category}', [ProductController::class, 'getProductsByCategory'])->middleware('auth');
 Route::get('/search', [ProductController::class, 'search'])->name('products.search');
-Route::get('/statistics/products', [ProductController::class, 'ProductStats'])->name('statistics.products');
-Route::get('/statistics/orders/{period?}', [OrderController::class, 'OrdersStats'])->name('statistics.orders');
+Route::get('/statistics/products', [ProductController::class, 'ProductStats'])->name('statistics.products')->middleware('auth');
+Route::get('/statistics/orders/{period?}', [OrderController::class, 'OrdersStats'])->name('statistics.orders')->middleware('auth');
 
 Route::get('/', function () {
     return view('indexFront');

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log; // Don't forget to import the Log facade
 use Illuminate\Support\Facades\DB; 
 
@@ -40,7 +41,6 @@ class OrderController extends Controller
         // Log the request data
 
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'status' => 'required|string',
             'products' => 'required|array',
             'products.*.product_id' => 'required|exists:products,id',
@@ -48,7 +48,7 @@ class OrderController extends Controller
         ]);
 
         $order = new Order();
-        $order->user_id = $request->user_id;
+        $order->user_id =Auth::id();
         $order->status = $request->status;
     
         $order->save(); // Save the order first
@@ -77,14 +77,13 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'status' => 'required|string',
             'products' => 'required|array',
             'products.*.product_id' => 'required|exists:products,id',
             'products.*.quantity' => 'required|integer|min:1',
         ]);
 
-        $order->user_id = $request->user_id;
+        $order->user_id =Auth::id();
         $order->status = $request->status;
         $order->save(); // Save the order first
 
@@ -128,7 +127,7 @@ class OrderController extends Controller
     public function addToCart(Request $request, $productId)
     {
         // Assuming the static user ID is 1
-        $userId = 1;
+        $userId =Auth::id();
 
         // Validate the quantity; it's optional because we'll default to 1
         $request->validate([
@@ -167,7 +166,7 @@ class OrderController extends Controller
     public function showCart()
     {
         // Assuming a static user with ID 1
-        $userId = 1; // Replace with the actual user ID as needed
+        $userId =Auth::id();  // Replace with the actual user ID as needed
 
         // Retrieve the order for the user (assuming it has a 'pending' status)
         $order = Order::where('user_id', $userId)->where('status', 'pending')->first();
@@ -201,7 +200,7 @@ class OrderController extends Controller
     public function removeProduct($productId)
     {
         // Retrieve the static user's active order
-        $order = Order::where('user_id', 1)->where('status', 'pending')->first();
+        $order = Order::where('user_id', Auth::id())->where('status', 'pending')->first();
 
         if (!$order) {
             return redirect()->back()->with('error', 'No active order found.');
@@ -240,7 +239,7 @@ class OrderController extends Controller
 
     public function getCartCount()
     {
-        $cartCount = Order::where('user_id', 1)->where('status', 'pending')->withCount('products')->first()->products_count ?? 0;
+        $cartCount = Order::where('user_id', Auth::id())->where('status', 'pending')->withCount('products')->first()->products_count ?? 0;
 
 
         return response()->json(['count' => $cartCount]);

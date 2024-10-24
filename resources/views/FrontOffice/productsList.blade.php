@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="{{ asset('ProductsAssets/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('ProductsAssets/css/responsive.css') }}">
 
-    <div class="product-section d-flex flex-column min-vh-100">
-        <div class="flex-grow-1">
+    <div class="section product-section d-flex flex-column min-vh-100 ">
+        <div class=" container flex-grow-1">
             <div class="row">
-                <div class="col-md-10" style="margin-bottom: 0 !important;">
+                <div class="col-md-10" style="margin-bottom: 0 !important;margin-left:5%">
                     <div class="product-filters">
                         <ul>
                             <li class="active" data-filter="*">All</li>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <div class="collapse show col-md-10" style="align-items: center; padding: 0; margin-left: 10%;">
+                <div class="collapse show col-md-10" style="align-items: center; padding: 0; margin-left: 20%;">
                     <div class="billing-address-form" style="padding: 0 !important;">
                         <form action="{{ route('products.search') }}" method="GET" class="d-flex billing-address-form">
                             <input type="text" name="query" class="col-md-6 form-control" placeholder="Search products..." value="{{ request()->input('query') }}">
@@ -40,7 +40,7 @@
             <div class="row product-lists" id="product-list">
                 @if($products->count())
                 @foreach ($products as $product)
-                <div class="col-lg-3 col-md-4 text-center mr-2">
+                <div class="col-lg-3 col-md-4 text-center ">
                     <div class="single-product-item">
                         <div class="product-image">
                             <a href="{{ route('products.show', $product->id) }}">

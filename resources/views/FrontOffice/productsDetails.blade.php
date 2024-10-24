@@ -17,8 +17,8 @@
 
 
 <!-- single product -->
-<div class="single-product ">
-    <div class="">
+<div class="single-product section">
+    <div class="container">
         <div class="row">
             <div class="col-md-5">
                 <div class="single-product-img">
@@ -39,13 +39,7 @@
                         <!-- <a href="cart.html" class=""> Add to Cart</a> -->
                         <p><strong>Categories: </strong>{{ $product->category }}</p>
                     </div>
-                    <!-- <h4>Share:</h4>
-                    <ul class="product-share">
-                        <li><a href=""><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href=""><i class="fab fa-twitter"></i></a></li>
-                        <li><a href=""><i class="fab fa-google-plus-g"></i></a></li>
-                        <li><a href=""><i class="fab fa-linkedin"></i></a></li>
-                    </ul> -->
+                   
                 </div>
             </div>
         </div>

@@ -61,14 +61,12 @@
                             <td>{{ $product->category }}</td>
                             <td>
                                 <a href="{{ route('products.edit', $product->id) }}" class="btn btn-white btn-sm">
-                                    <i data-feather="edit" class="text-warning"></i>
-                                </a>
+                                    <i class="fas fa-edit text-warning"></i> </a>
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-white btn-sm">
-                                        <i data-feather="trash" class="text-danger"></i>
-                                    </button>
+                                        <i class="fas fa-trash-alt text-danger"></i> </button>
                                 </form>
                             </td>
                         </tr>

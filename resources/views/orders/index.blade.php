@@ -73,15 +73,14 @@
                             <td>
                                 <!-- Edit button -->
                                 <a href="{{ route('orders.edit', $order->id) }}" class="btn btn-white btn-sm" title="Edit">
-                                    <i data-feather="edit" class="text-warning"></i>
-                                </a>
+                                    <i class="fas fa-edit text-warning"></i> </a>
 
                                 <!-- Delete form -->
                                 <form action="{{ route('orders.destroy', $order->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-white btn-sm" title="Delete">
-                                        <i data-feather="trash" class="text-danger"></i>
+                                        <i class="fas fa-trash-alt text-danger"></i>
                                     </button>
                                 </form>
                             </td>
@@ -106,15 +105,7 @@
             <div class="modal-body">
                 <form action="{{ route('orders.store') }}" method="POST">
                     @csrf
-                    <div class="mb-3">
-                        <label for="user_id" class="form-label">User</label>
-                        <select class="form-control" id="user_id" name="user_id" required>
-                            <option value="" disabled selected>Select User</option>
-                            @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    
 
                     <!-- Product 1 -->
                     <div class="mb-3">

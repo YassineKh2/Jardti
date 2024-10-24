@@ -42,8 +42,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-white btn-sm" title="Delete">
-                                            <i data-feather="trash" class="text-danger"></i>
-                                        </button>
+                                            <i class="fas fa-trash-alt text-danger"></i> </button>
                                     </form>
                                 </td>
                                 <td class="product-image"><img src="{{ asset('storage/' . $product['image']) }}" alt=""></td>
