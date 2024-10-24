@@ -65,11 +65,11 @@
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0 text-success">Tasks Table</h5>
-            <div>
+            <div class="d-flex align-items-baseline gap-2">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTaskModal">
-                    <i data-feather="plus-circle" class="me-1"></i>Add Task
+                   Add Task
                 </button>
-                <a  href="/plants" class="btn btn-success">Add Plants</a>
+                <a  href="/plants" class="btn btn-success rounded-3">Add Plants</a>
             </div>
 
         </div>
@@ -114,25 +114,25 @@
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($task->dueDate)->format('Y-m-d') }}</td>
 
-                                <td class="d-flex justify-content-center align-items-center gap-1">
-                                    <button type="button" class="btn btn-outline-primary btn-sm editTaskBtn"
-                                    data-id="{{ $task->id }}"
-                                    data-name="{{ $task->name }}"
-                                    data-description="{{ $task->description }}"
-                                    data-status="{{ $task->status }}"
-                                    data-duedate="{{ $task->dueDate }}"
-                                    data-plant-image="{{ $task->plant ? asset($task->plant->image) : '' }}"
-                                    data-bs-toggle="modal" data-bs-target="#editTaskModal">
-                                    <i data-feather="edit"></i>
-                                </button>
+                                  <td class="d-flex justify-content-center align-items-center gap-1">
+                                      <button type="button" class=" fa fa-pencil-square-o btn btn-outline-primary btn-sm editTaskBtn"
+                                              data-id="{{ $task->id }}"
+                                              data-name="{{ $task->name }}"
+                                              data-description="{{ $task->description }}"
+                                              data-status="{{ $task->status }}"
+                                              data-duedate="{{ $task->dueDate }}"
+                                              data-plant-image="{{ $task->plant ? asset($task->plant->image) : '' }}"
+                                              data-bs-toggle="modal" data-bs-target="#editTaskModal">
+                                      </button>
 
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this task?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                                            <i data-feather="trash"></i>
-                                        </button>
-                                    </form>
+                                      <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                          @csrf
+                                          @method('DELETE')
+                                          <button type="submit" class="btn btn-outline-danger fa fa-trash btn-sm">
+                                              <i data-feather="trash"></i>
+                                          </button>
+                                      </form>
+                                  </td>
                                     <!-- Modal for Editing a Task -->
                                     <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">

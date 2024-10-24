@@ -99,9 +99,6 @@
         padding: 5px 10px;
         border-radius: 20px;
     }
-    body {
-        background-color: #f9f9f9; /* Soft background color */
-    }
     .card {
         border-radius: 15px; /* Rounded corners */
         transition: transform 0.2s; /* Smooth scaling on hover */
@@ -132,10 +129,9 @@
             <div class="d-flex flex-grow-1 justify-content-center gap-3">
                 <!-- Centered navbar links -->
                 <a href="/" class="nav-link text-black">Home</a>
-                <a class="nav-link  text-black">Shop</a>
                 <a href="/tasks" class="nav-link text-black">Tasks</a>
                 <a class="nav-link text-black">Forum</a>
-                <a class="nav-link text-black">Trading</a>
+                <a href="/Client/ProductsList"   class="nav-link text-black">Products</a>
                 <a href="/courses" class="nav-link text-black">Courses</a>
                 <a class="nav-link text-black" href="{{ route('eventsFront') }}">Events</a>
                 <a class="nav-link text-black" href="/mypoints">My points</a>
@@ -146,6 +142,10 @@
                 <span class="navbar-text me-3">
                     Welcome, {{ auth()->user()->name }}!
                 </span>
+                <a href="/cart" class="shopping-cart text-black" style="font-size: medium; align-self: center; margin-right: 1%;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-count" style=" top: -5px; right: -10px; background: red; color: white;border-radius: 50%;padding: 2px 5px;font-size: 12px;">0</span>
+                </a>
             @else
                 <a href="/login" class="btn btn-success" type="button">Get Started</a>
             @endif
