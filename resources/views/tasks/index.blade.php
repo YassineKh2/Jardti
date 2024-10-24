@@ -1,23 +1,13 @@
 @extends('layouts.navbar', ['title' => 'Task List'])
 
 @section('content')
-    <div class="py-3 d-flex align-items-center flex-column flex-sm-row">
-        <div class="flex-grow-1">
-            <h4 class="fs-24 fw-bold m-0 text-success">Task List</h4>
-        </div>
-        <div class="text-end">
-            <ol class="breadcrumb m-0 py-0">
-                <li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
-                <li class="breadcrumb-item active">Tasks</li>
-            </ol>
-        </div>
-    </div>
 
-    <div class="filter-container mb-4 p-3 border rounded shadow-sm bg-light">
+
+    <div class="filter-container my-4 p-3 border rounded shadow-sm bg-light">
         <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterForm" aria-expanded="false" aria-controls="filterForm">
             <i class="fas fa-filter"></i> Filter
         </button>
-    
+
         <!-- Display Selected Filters -->
         <div class="mt-3">
             @if(request()->has('task_type') || request()->has('status'))
@@ -38,7 +28,7 @@
                 </div>
             @endif
         </div>
-    
+
         <div class="collapse mt-3" id="filterForm">
             <form id="taskFilterForm" method="GET" action="{{ route('tasks.index') }}" class="mt-3">
                 <div class="row g-3">
@@ -64,21 +54,26 @@
             </form>
         </div>
     </div>
-    
-    
-    
-    
-    
 
-    
+
+
+
+
+
+
+
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0 text-success">Tasks Table</h5>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTaskModal">
-                <i data-feather="plus-circle" class="me-1"></i>Add Task
-            </button>
+            <div>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                    <i data-feather="plus-circle" class="me-1"></i>Add Task
+                </button>
+                <a  href="/plants" class="btn btn-success">Add Plants</a>
+            </div>
+
         </div>
-    
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -100,7 +95,7 @@
                                 <th scope="row">{{ $i + 1 }}</th>
                                 <td>
                                     @if($task->plant_id)
-                                        <i class="fas fa-leaf text-success" title="Plant-based Task" 
+                                        <i class="fas fa-leaf text-success" title="Plant-based Task"
                                            onclick="showPlantDetails('{{ asset($task->plant->image) }}', '{{ $task->plant->name }}', '{{ $task->plant->description }}')"></i>
                                     @else
                                         <i class="fas fa-tasks text-secondary" title="General Task"></i>
@@ -118,14 +113,14 @@
                                     @endif
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($task->dueDate)->format('Y-m-d') }}</td>
-                                
+
                                 <td class="d-flex justify-content-center align-items-center gap-1">
-                                    <button type="button" class="btn btn-outline-primary btn-sm editTaskBtn" 
-                                    data-id="{{ $task->id }}" 
+                                    <button type="button" class="btn btn-outline-primary btn-sm editTaskBtn"
+                                    data-id="{{ $task->id }}"
                                     data-name="{{ $task->name }}"
                                     data-description="{{ $task->description }}"
                                     data-status="{{ $task->status }}"
-                                    data-duedate="{{ $task->dueDate }}" 
+                                    data-duedate="{{ $task->dueDate }}"
                                     data-plant-image="{{ $task->plant ? asset($task->plant->image) : '' }}"
                                     data-bs-toggle="modal" data-bs-target="#editTaskModal">
                                     <i data-feather="edit"></i>
@@ -138,7 +133,52 @@
                                             <i data-feather="trash"></i>
                                         </button>
                                     </form>
-                                    
+                                    <!-- Modal for Editing a Task -->
+                                    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="editTaskForm" method="POST" action="{{ route('tasks.update', $task->id) }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="mb-3">
+                                                            <label for="editTaskName" class="form-label">Task Name</label>
+                                                            <input type="text" class="form-control" id="editTaskName" name="name" value="{{ old('name', $task->name) }}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="editTaskDescription" class="form-label">Description</label>
+                                                            <textarea class="form-control" id="editTaskDescription" name="description" rows="3" required>{{ old('description', $task->description) }}</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="editTaskStatus" class="form-label">Status</label>
+                                                            <select class="form-select" id="editTaskStatus" name="status" required>
+                                                                <option value="to do" {{ $task->status == 'to do' ? 'selected' : '' }}>To Do</option>
+                                                                <option value="doing" {{ $task->status == 'doing' ? 'selected' : '' }}>Doing</option>
+                                                                <option value="done" {{ $task->status == 'done' ? 'selected' : '' }}>Done</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="editTaskDueDate" class="form-label">Due Date</label>
+                                                            <input type="date" class="form-control" id="editTaskDueDate" name="dueDate" value="{{ old('dueDate', $task->dueDate) }}" required>
+                                                        </div>
+
+
+
+
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-success">Update Task</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </td>
                             </tr>
                         @endforeach
@@ -147,7 +187,7 @@
             </div>
         </div>
     </div>
-    
+
 
 <!-- Plant Details Modal -->
 <div class="modal fade" id="plantDetailsModal" tabindex="-1" aria-labelledby="plantDetailsModalLabel" aria-hidden="true">
@@ -166,10 +206,10 @@
     </div>
 </div>
 
-  
+
 
 <!-- Modal for Adding a Task -->
-<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true" 
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true"
     @if($errors->any()) style="display: block;" @endif>
     <div class="modal-dialog">
         <div class="modal-content">
@@ -213,21 +253,9 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    
-                    
-                    <div class="mb-3" id="plantSelection" style="display: none;">
-                        <label for="taskPlant" class="form-label">Related Plant</label>
-                        <select class="form-select @error('plant_id') is-invalid @enderror" id="taskPlant" name="plant_id">
-                            <option value="" selected>Choose a plant</option>
-                            @foreach($plants as $plant)
-                                <option value="{{ $plant->id }}" {{ old('plant_id') == $plant->id ? 'selected' : '' }}>{{ $plant->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('plant_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
+
+
+
 
                     <div class="mb-3" id="plantSelection" style="display: none;">
                         <label for="taskPlant" class="form-label">Related Plant</label>
@@ -269,51 +297,7 @@
     </div>
 </div>
 
-<!-- Modal for Editing a Task -->
-<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editTaskForm" method="POST" action="{{ route('tasks.update', $task->id) }}">
-                    @csrf
-                    @method('PUT')
-                    <div class="mb-3">
-                        <label for="editTaskName" class="form-label">Task Name</label>
-                        <input type="text" class="form-control" id="editTaskName" name="name" value="{{ old('name', $task->name) }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editTaskDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="editTaskDescription" name="description" rows="3" required>{{ old('description', $task->description) }}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editTaskStatus" class="form-label">Status</label>
-                        <select class="form-select" id="editTaskStatus" name="status" required>
-                            <option value="to do" {{ $task->status == 'to do' ? 'selected' : '' }}>To Do</option>
-                            <option value="doing" {{ $task->status == 'doing' ? 'selected' : '' }}>Doing</option>
-                            <option value="done" {{ $task->status == 'done' ? 'selected' : '' }}>Done</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editTaskDueDate" class="form-label">Due Date</label>
-                        <input type="date" class="form-control" id="editTaskDueDate" name="dueDate" value="{{ old('dueDate', $task->dueDate) }}" required>
-                    </div>
-                   
 
-                   
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Update Task</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -348,29 +332,29 @@
             const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
             document.getElementById('taskDueDate').value = today; // Set the input value
         }
-    
+
         // Function to reset the Add Task modal
         function resetAddTaskModal() {
             document.getElementById('addTaskForm').reset(); // Reset the form
             document.getElementById('plantSelection').style.display = 'none'; // Hide plant selection by default
             setDefaultDueDate(); // Set today's date as default
         }
-    
+
         // Event listener for the Add Task modal show event
         const addTaskModal = document.getElementById('addTaskModal');
         if (addTaskModal) {
             addTaskModal.addEventListener('show.bs.modal', function() {
                 resetAddTaskModal(); // Reset the modal when shown
-    
+
                 // Attach the task type change listener here to ensure it's active when modal opens
                 document.getElementById('taskType').addEventListener('change', togglePlantSelection);
             });
-    
+
             // Event listener for the form submission in the Add Task modal
             addTaskModal.querySelector('form').addEventListener('submit', function (event) {
                 const taskType = document.getElementById('taskType').value;
                 const plantId = document.getElementById('taskPlant').value;
-    
+
                 // Check if the task type is plant-based and if a related plant is selected
                 if (taskType === 'plant-based' && !plantId) {
                     event.preventDefault(); // Prevent form submission
@@ -378,7 +362,7 @@
                 }
             });
         }
-    
+
         // Event listeners for editing tasks
         document.querySelectorAll('.editTaskBtn').forEach(button => {
             button.addEventListener('click', function () {
@@ -388,7 +372,7 @@
                 const description = this.getAttribute('data-description');
                 const status = this.getAttribute('data-status');
                 const dueDate = this.getAttribute('data-duedate'); // Ensure this is formatted correctly
-    
+
                 // Populate the form fields with the task data
                 document.getElementById('editTaskName').value = name || '';
                 document.getElementById('editTaskDescription').value = description || '';
@@ -400,7 +384,7 @@
                 document.getElementById('editTaskForm').action = `/tasks/${id}`;
             });
         });
-    
+
         // Function to toggle plant selection visibility based on task type
         function togglePlantSelection() {
             const taskType = document.getElementById('taskType').value;
@@ -412,11 +396,11 @@
                 document.getElementById('taskPlant').selectedIndex = 0; // Reset plant selection
             }
         }
-    
+
         // Initialize default due date when the script runs
         window.onload = setDefaultDueDate;
 
-        
+
     </script>
-    
-@endsection    
+
+@endsection
