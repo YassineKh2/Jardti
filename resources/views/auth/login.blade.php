@@ -75,37 +75,7 @@
                         </div>
                     </form>
 
-                    <!-- Separator and Social Login -->
-                    <div class="saprator my-4"><span>or sign in with</span></div>
-                    <div class="row">
-                        <div class="col-12">
-                            <a class="btn text-dark border fw-normal d-flex align-items-center justify-content-center mb-3"> 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48" class="me-2">
-                                    <!-- Google icon -->
-                                    <path fill="#ffc107" d="..."/>
-                                </svg>
-                                <span>Sign in with Google</span>
-                            </a>
-                        </div>
-                        <div class="col-12">
-                            <a class="btn btn-primary fw-normal d-flex align-items-center justify-content-center mb-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="me-2">
-                                    <!-- Facebook icon -->
-                                    <path fill="#ffffff" d="..."/>
-                                </svg>
-                                <span>Sign in with Facebook</span>
-                            </a>
-                        </div>
-                        <div class="col-12">
-                            <a class="btn btn-dark fw-normal d-flex align-items-center justify-content-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="me-2">
-                                    <!-- Apple icon -->
-                                    <path fill="#ffffff" d="..."/>
-                                </svg>
-                                <span>Sign in with Apple</span>
-                            </a>
-                        </div>
-                    </div>
+
 
                     <!-- Register Link -->
                     <div class="text-center text-muted mb-4">

@@ -1,4 +1,4 @@
-@extends('layouts.navbar')
+@extends('layouts.navbar', ['title' => 'Events'])
 
 @section('content')
 
@@ -74,7 +74,7 @@
         @endforeach
     </div>
     <h5 class="text-center mb-3">
-    Click the button below and say something like 
+    Click the button below and say something like
     <strong>"Take me to [any category name] events"</strong> to navigate through different event categories.
 </h5>
     <!-- Search bar container -->
@@ -181,7 +181,7 @@
     // Loop through events and place markers based on geocoded address
     events.forEach(function(event) {
         var address = event.location; // Address is the location stored in your database
-        
+
         // Log the event and its address for debugging
         console.log('Event:', event.name, 'Address:', address);
 
@@ -216,7 +216,7 @@ function geocodeAddress(geocoder, map, event) {
         }
     });
 
-    
+
 
 
 
@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-    
+
 </script>
 @endsection
 
@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
     background-color: #e9ecef;
 }
 
-    
+
     body, html {
         margin: 0;
         padding: 0;
@@ -316,8 +316,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     .carousel-item img {
-        width: 100%; 
-        height: auto; 
+        width: 100%;
+        height: auto;
         object-fit: cover;
     }
 
@@ -421,5 +421,5 @@ document.addEventListener('DOMContentLoaded', function() {
     #pills-tab {
         display: none;
     }
-    
+
 </style>

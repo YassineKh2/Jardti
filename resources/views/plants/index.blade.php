@@ -3,7 +3,7 @@
 @section('content')
 <div class="container my-5">
     <h1 class="text-center mb-4 text-success">Plant List</h1>
-    
+
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -127,10 +127,10 @@
             @foreach($plants as $plant)
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-sm rounded">
-                        <img src="{{ $plant->image ? asset('storage/' . $plant->image) : 'https://via.placeholder.com/300' }}" 
-                             class="card-img-top plant-image rounded-top" 
-                             alt="{{ $plant->name }}" 
-                             onclick="openEditModal({{ $plant }})" 
+                        <img src="{{ $plant->image ? asset($plant->image) : 'https://via.placeholder.com/300' }}"
+                             class="card-img-top plant-image rounded-top"
+                             alt="{{ $plant->name }}"
+                             onclick="openEditModal({{ $plant }})"
                              style="cursor: pointer; height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">{{ $plant->name }}</h5>
@@ -149,7 +149,7 @@
                                         <i data-feather="trash" class="me-1"></i> Delete
                                     </button>
                                 </form>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
 
         // Set the current plant image
         const currentImage = document.getElementById('currentPlantImage');
-        currentImage.src = plant.image ? '/storage/' + plant.image : 'https://via.placeholder.com/300';
+        currentImage.src = plant.image ?  plant.image : 'https://via.placeholder.com/300';
 
         // Show the offcanvas modal
         const offcanvas = new bootstrap.Offcanvas(document.getElementById('editPlantOffcanvas'));

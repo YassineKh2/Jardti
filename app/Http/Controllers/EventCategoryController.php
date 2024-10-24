@@ -13,15 +13,15 @@ class EventCategoryController extends Controller
         return view('Event_categories.index', compact('eventCategories'));  // Event Category Views
     }
 
-    
+
 
     public function showCategories()
     {
         $eventCategories = EventCategory::all();  // Event Category Model
         return view('Events.eventsFront', compact('eventCategories'));  // Event Category Views
     }
-    
-    
+
+
 
     public function create()
     {
@@ -41,33 +41,33 @@ class EventCategoryController extends Controller
             'name.regex' => 'The category name must contain only letters and spaces.',
             'name.max' => 'The category name must not exceed 255 characters.',
             'name.unique' => 'This category name already exists. Please choose a different name.',
-    
+
             'description.string' => 'The description must be valid text.',
-    
+
             'image.image' => 'The file must be an image.',
             'image.mimes' => 'The image must be a type of jpeg, png, jpg, or gif.',
             'image.max' => 'The image size must not exceed 2 MB.',
         ]);
-    
+
         // Create new EventCategory
         $eventCategory = new EventCategory();
         $eventCategory->name = $request->name;
         $eventCategory->description = $request->description;
-    
+
         // Handle image upload
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('images/EventCategories'), $imageName);
             $eventCategory->image = 'images/EventCategories/' . $imageName;
         }
-    
+
         // Save the event category to the database
         $eventCategory->save();
-    
+
         // Redirect with success message
         return redirect()->route('event-categories.index')->with('success', 'Event Category created successfully!');
     }
-    
+
 
     public function edit($id)
     {

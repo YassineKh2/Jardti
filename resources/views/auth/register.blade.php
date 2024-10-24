@@ -80,34 +80,7 @@
                         </div>
                     </form>
 
-                    <!-- Social Media Registration -->
-                    <div class="saprator my-4"><span>or sign up with</span></div>
-                    <div class="row">
-                        <div class="col-12">
-                            <a class="btn text-dark border fw-normal d-flex align-items-center justify-content-center mb-3"> 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48" class="me-2">
-                                    <path fill="#ffc107" d="M43.611 20.083..."></path>
-                                </svg>
-                                <span>Sign up with Google</span>
-                            </a>
-                        </div>
-                        <div class="col-12">
-                            <a class="btn btn-primary fw-normal d-flex align-items-center justify-content-center mb-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="me-2">
-                                    <path fill="#ffffff" d="M9.198 21.5h4v-8.01h3.604l..."></path>
-                                </svg>
-                                <span>Sign up with Facebook</span>
-                            </a>
-                        </div>
-                        <div class="col-12">
-                            <a class="btn btn-dark fw-normal d-flex align-items-center justify-content-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="me-2">
-                                    <path fill="#ffffff" d="M15.718 5.492c..."></path>
-                                </svg>
-                                <span>Sign up with Apple</span>
-                            </a>
-                        </div>
-                    </div>
+
 
                     <!-- Already Have an Account -->
                     <div class="text-center text-muted mb-4">

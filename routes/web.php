@@ -85,8 +85,8 @@ Route::get('/events/search-by-date', [EventController::class, 'searchByDate'])->
 
 // --------------------- tasks  Routes --------------------- //
 
-Route::resource('tasks', TaskController::class);
-Route::put('/tasks/{id}/update-status', [TaskController::class, 'updateStatus']);
+Route::resource('tasks', TaskController::class)->middleware('auth');;
+Route::put('/tasks/{id}/update-status', [TaskController::class, 'updateStatus'])->middleware('auth');;
 
 
 // ---------------------  General Routes --------------------- //
@@ -97,8 +97,6 @@ Route::resource('plants', PlantController::class);
 
 
 
-// --------------------- Tasks Routes --------------------- //
-Route::resource('tasks', TaskController::class)->middleware('auth');
 
 // --------------------- Gamification Shop Routes --------------------- //
 Route::middleware('auth')->group(function () {

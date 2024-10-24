@@ -12,7 +12,7 @@ class PlantController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -35,7 +35,7 @@ class PlantController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -46,13 +46,13 @@ class PlantController extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
+
         // Process image upload
         $imagePath = null; // Initialize imagePath
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images/plants', 'public'); 
+            $imagePath = $request->file('image')->store('storage/images/plants', 'public');
         }
-    
+
         // Create the plant, associating it with the authenticated user
         Plant::create([
             'name' => $request->name,
@@ -61,10 +61,10 @@ class PlantController extends Controller
             'image' => $imagePath, // Use image path if available
             'user_id' => auth()->id(), // Associate the plant with the authenticated user
         ]);
-    
+
         return redirect()->route('plants.index')->with('success', 'Plant added successfully!');
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -104,16 +104,19 @@ class PlantController extends Controller
             'name' => 'required|string|max:255',
             'category' => 'required|string',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
+
         // Process image upload
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images/plants', 'public'); 
+            $imagePath = $request->file('image')->store('storage/images/plants', 'public');
+            $data['image'] =  $imagePath;
         }
+
+
         $plant->update($data);
         return redirect()->route('plants.index');
-    
+
     }
 
     /**

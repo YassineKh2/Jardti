@@ -12,18 +12,18 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
         // Start with the base query and include the plant relationship
         $query = Task::with('plant'); // Eager load the plant relationship
-    
+
         // Apply filters only if they are provided
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-    
+
         if ($request->filled('task_type')) {
             if ($request->task_type === 'plant-based') {
                 $query->whereNotNull('plant_id'); // Filter for plant-based tasks
@@ -31,17 +31,17 @@ class TaskController extends Controller
                 $query->whereNull('plant_id'); // Filter for general tasks
             }
         }
-    
+
         // Execute the query to get tasks
         $tasks = $query->get();
-    
+
         // Fetch all plants for the view (if needed for other purposes)
         $plants = Plant::all();
-    
+
         // Return the view with tasks and plants
         return view('tasks.index', compact('tasks', 'plants'));
     }
-    
+
 
 
     /**
@@ -81,7 +81,7 @@ class TaskController extends Controller
              'dueDate.date' => 'The due date must be a valid date.',
              'dueDate.after_or_equal' => 'The due date must be today or later.',
          ]);
-     
+
          // Store the task and associate it with the authenticated user
          Task::create([
              'name' => $request->name,
@@ -92,12 +92,12 @@ class TaskController extends Controller
              'dueDate' => $request->dueDate,
              'user_id' => auth()->id(), // Associate the task with the authenticated user
          ]);
-     
+
          return redirect()->route('tasks.index')->with('success', 'Task added successfully.');
      }
-     
-     
-    
+
+
+
 
     /**
      * Display the specified resource.
@@ -107,9 +107,9 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        
-        
-        
+
+
+
     }
 
     /**
@@ -120,10 +120,10 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-      
+
     }
-    
-    
+
+
 
     /**
      * Update the specified resource in storage.
@@ -132,8 +132,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
-{    $task = Task::with('plant')->findOrFail($id);
+    public function update(Request $request, $id)
+{
+    $task = Task::with('plant')->findOrFail($id);
 
     // Validate only the fields that are present in the request
     $data = $request->validate([
@@ -163,7 +164,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        
+
     $task->delete();
     return redirect()->route('tasks.index');
     }
