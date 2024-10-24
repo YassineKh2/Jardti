@@ -5,11 +5,12 @@
     <!-- Welcome Message -->
     <div class="row mb-0">
     <div class="col-12">
-        <div class="alert alert-success text-center shadow-sm rounded-lg p-5" role="alert" 
-            style="background: url('{{ asset('images/nature.jpg') }}') no-repeat center center; background-size: cover; color: white;">
-            <h1 class="fw-bold"><i class="fas fa-graduation-cap"></i> Welcome to Jarditi Courses</h1>
-            <h5>Explore the available categories and find the courses that interest you!</h5>
-        </div>
+    <div class="alert alert-success text-center shadow-sm rounded-lg p-5" role="alert" 
+     style="background: url('{{ asset('images/nature.jpg') }}') no-repeat center center; background-size: cover; color: red;">
+    <h1 class="fw-bold" style="color: white;"><i class="fas fa-graduation-cap"></i> Welcome to Jarditi Courses</h1>
+    <h5  class="fw-bold" style="color: white;">Explore the available categories and find the courses that interest you!</h5>
+</div>
+
     </div>
 </div>
 
