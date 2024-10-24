@@ -216,7 +216,7 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Simple Donut Chart</h5>
+                    <h5 class="card-title mb-0">Events by category</h5>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <div id="simple_donut_chart" class="apex-charts"></div> 
