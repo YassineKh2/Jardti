@@ -35,130 +35,134 @@
             </div>
 
             <div class="card-body">
+                <!-- Display general error message (optional) -->
+               
+
                 <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+    @csrf
 
-                    <div class="row">
-    <div class="col-xl-6">
-        <!-- Event Name -->
-        <div class="mb-3">
-            <label class="form-label" for="name">Event Name</label>
-            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
-            @error('name')
-            <div class="invalid-feedback">
-                {{ $message }}
+    <div class="row">
+        <div class="col-xl-6">
+            <!-- Event Name -->
+            <div class="mb-3">
+                <label class="form-label" for="name">Event Name</label>
+                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                @error('name')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
             </div>
-            @enderror
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label class="form-label" for="description">Event Description</label>
+                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description') }}</textarea>
+                @error('description')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+
+            <!-- Google Maps Location -->
+            <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" placeholder="Select a location" readonly>
+                <div id="map"></div>
+                @error('location')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
         </div>
 
-        <!-- Description -->
-        <div class="mb-3">
-            <label class="form-label" for="description">Event Description</label>
-            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description') }}</textarea>
-            @error('description')
-            <div class="invalid-feedback">
-                {{ $message }}
+        <div class="col-xl-6">
+            <!-- Start Date -->
+            <div class="mb-3">
+                <label class="form-label" for="start_date">Start Date</label>
+                <input type="text" class="form-control @error('start_date') is-invalid @enderror" id="start_date" name="start_date" placeholder="Select start date" value="{{ old('start_date') }}" required>
+                @error('start_date')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
             </div>
-            @enderror
-        </div>
 
-        <!-- Google Maps Location -->
-        <div class="mb-3">
-            <label class="form-label" for="location">Location</label>
-            <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" placeholder="Select a location" readonly>
-            <div id="map"></div>
-            @error('location')
-            <div class="invalid-feedback">
-                {{ $message }}
+            <!-- End Date -->
+            <div class="mb-3">
+                <label class="form-label" for="end_date">End Date</label>
+                <input type="text" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" placeholder="Select end date" value="{{ old('end_date') }}" required>
+                @error('end_date')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
             </div>
-            @enderror
+
+            <!-- Category Selection -->
+            <div class="mb-3">
+                <label class="form-label" for="category_id">Event Category</label>
+                <select class="form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
+                    <option value="" disabled selected>Select Category</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+
+            <!-- Capacity -->
+            <div class="mb-3">
+                <label class="form-label" for="capacity">Capacity</label>
+                <input type="number" class="form-control @error('capacity') is-invalid @enderror" id="capacity" name="capacity" value="{{ old('capacity') }}">
+                @error('capacity')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+                <label class="form-label" for="price">Price</label>
+                <input type="text" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}">
+                @error('price')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+
+            <!-- Image Upload -->
+            <div class="mb-3">
+                <label class="form-label" for="image">Event Image</label>
+                <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
+                @error('image')
+                <div class="invalid-feedback" style="color: red;">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
         </div>
     </div>
 
-    <div class="col-xl-6">
-        <!-- Start Date -->
-        <div class="mb-3">
-            <label class="form-label" for="start_date">Start Date</label>
-            <input type="text" class="form-control @error('start_date') is-invalid @enderror" id="start_date" name="start_date" placeholder="Select start date" value="{{ old('start_date') }}" required>
-            @error('start_date')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-
-        <!-- End Date -->
-        <div class="mb-3">
-            <label class="form-label" for="end_date">End Date</label>
-            <input type="text" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" placeholder="Select end date" value="{{ old('end_date') }}" required>
-            @error('end_date')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-
-        <!-- Category Selection -->
-        <div class="mb-3">
-            <label class="form-label" for="category_id">Event Category</label>
-            <select class="form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
-                <option value="" disabled selected>Select Category</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                @endforeach
-            </select>
-            @error('category_id')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-
-        <!-- Capacity -->
-        <div class="mb-3">
-            <label class="form-label" for="capacity">Capacity</label>
-            <input type="number" class="form-control @error('capacity') is-invalid @enderror" id="capacity" name="capacity" value="{{ old('capacity') }}">
-            @error('capacity')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-
-        <!-- Price -->
-        <div class="mb-3">
-            <label class="form-label" for="price">Price</label>
-            <input type="text" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}">
-            @error('price')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
-
-        <!-- Image Upload -->
-        <div class="mb-3">
-            <label class="form-label" for="image">Event Image</label>
-            <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
-            @error('image')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-            @enderror
-        </div>
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">Create Event</button>
     </div>
-</div>
+</form>
 
-                    <!-- Align button to the right -->
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Create Event</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
 
 @section('script')
     <!-- Including Flatpickr JS -->
