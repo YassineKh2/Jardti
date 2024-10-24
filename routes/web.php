@@ -8,16 +8,12 @@ use App\Http\Controllers\TaskController;
 
 use \App\Http\Controllers\PlantController;
 
-use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\PointsController;
 use \App\Http\Controllers\ItemController;
 
 
-=======
-use App\Http\Controllers\PointsController;
 use App\Http\Controllers\CourseCategoriesController;
 use App\Http\Controllers\CoursesController;
-use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 
 
@@ -59,7 +55,6 @@ Route::put('/tasks/{id}/update-status', [TaskController::class, 'updateStatus'])
 Route::resource('plants', PlantController::class);
 
 
-=======
 // Frontend Event View
 Route::get('/events', function () {
     return view('Events.eventsFront', ['title' => 'Events']);
