@@ -31,19 +31,34 @@
                             <!-- Category Name -->
                             <div class="mb-3">
                                 <label class="form-label" for="name">Category Name</label>
-                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                                @error('name')
+                                <div class="invalid-feedback" style="color: red;">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
 
                             <!-- Description -->
                             <div class="mb-3">
                                 <label class="form-label" for="description">Description</label>
-                                <textarea class="form-control" id="description" name="description">{{ old('description') }}"></textarea>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description') }}</textarea>
+                                @error('description')
+                                <div class="invalid-feedback" style="color: red;">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
 
                             <!-- Image Upload -->
                             <div class="mb-3">
                                 <label class="form-label" for="image">Category Image</label>
-                                <input type="file" class="form-control" id="image" name="image">
+                                <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
+                                @error('image')
+                                <div class="invalid-feedback" style="color: red;">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                     </div>
