@@ -67,50 +67,61 @@ public function index()
 
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'pdf' => 'required|mimes:pdf|max:10000', // Validate PDF file
-            'course_category_id' => 'required|exists:course_categories,id',
-        ]);
+{
+    // Validate incoming data
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'pdf' => 'required|mimes:pdf|max:10000', // Validate PDF file
+        'course_category_id' => 'required|exists:course_categories,id',
+    ]);
+
+    // Store the uploaded PDF in 'courses' directory under 'public' disk
+    $pdfPath = $request->file('pdf')->store('courses', 'public');
     
-        $pdfPath = $request->file('pdf')->store('courses', 'public');
-        $pdfFullPath = storage_path('app/public/' . $pdfPath);
-    
-        $audioDir = storage_path('app/public/audio');
-    
-        if (!file_exists($audioDir)) {
-            mkdir($audioDir, 0755, true);
-        }
-    
-        $pdfFullPath = str_replace('\\', '/', $pdfFullPath);
-        $audioDir = str_replace('\\', '/', $audioDir);
-    
-        $pythonScriptPath = storage_path('python/convert_pdf_to_audio.py');
-        $pythonScriptPath = str_replace('\\', '/', $pythonScriptPath);
-    
-        $command = "python $pythonScriptPath \"$pdfFullPath\" \"$audioDir\" 2>&1";
-        $output = shell_exec($command);
-    
-        $audioFileName = pathinfo($pdfPath, PATHINFO_FILENAME) . '.mp3';
-        $audioFullPath = storage_path('app/public/audio/' . $audioFileName);
-    
-        if (!file_exists($audioFullPath)) {
-            return back()->with('error', 'Failed to generate audio for the course. Please try again.');
-        }
-    
-        Course::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'pdf' => $pdfPath,
-            'audio' => 'storage/audio/' . $audioFileName,
-            'course_category_id' => $request->course_category_id,
-        ]);
-    
-        // Redirect to the courses list page with a success message
-        return redirect()->route('courses.index')->with('success', 'Course created successfully with audio!');
+    // Get full path of the stored PDF and audio directory
+    $pdfFullPath = storage_path('app/public/' . $pdfPath);
+    $audioDir = storage_path('app/public/audio');
+
+    // Create the audio directory if it doesn't exist
+    if (!file_exists($audioDir)) {
+        mkdir($audioDir, 0755, true);
     }
+
+    // Replace backslashes with forward slashes to avoid Windows path issues
+    $pdfFullPath = str_replace('\\', '/', $pdfFullPath);
+    $audioDir = str_replace('\\', '/', $audioDir);
+
+    // Get the Python script path
+    $pythonScriptPath = storage_path('python/convert_pdf_to_audio.py');
+    $pythonScriptPath = str_replace('\\', '/', $pythonScriptPath);
+
+    // Construct the Python command to run the script with arguments
+    $command = "python \"$pythonScriptPath\" \"$pdfFullPath\" \"$audioDir\" 2>&1";
+    $output = shell_exec($command); // Execute the command and capture the output
+
+    // Define the expected audio filename based on the original PDF name
+    $audioFileName = pathinfo($pdfPath, PATHINFO_FILENAME) . '.mp3';
+    $audioFullPath = storage_path('app/public/audio/' . $audioFileName);
+
+    // Check if the audio file was generated successfully
+    if (!file_exists($audioFullPath)) {
+        return back()->with('error', 'Failed to generate audio for the course. Please try again.');
+    }
+
+    // Store the course information in the database
+    Course::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'pdf' => $pdfPath, // Save the relative path to the PDF
+        'audio' => 'storage/audio/' . $audioFileName, // Save the relative path to the audio file
+        'course_category_id' => $request->course_category_id,
+    ]);
+
+    // Redirect to the courses list page with a success message
+    return redirect()->route('courses.index')->with('success', 'Course created successfully with audio!');
+}
+
     
 
     public function show($id)

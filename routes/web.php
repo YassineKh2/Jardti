@@ -74,6 +74,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('/back/event-categories', EventCategoryController::class);
 });
 
+// ---------------------  Event Routes --------------------- //
+Route::get('/events', [EventCategoryController::class, 'showCategories'])->name('eventsFront');
+Route::get('/events', [EventController::class, 'showEventsFront'])->name('eventsFront');
+Route::get('/export-events', [EventController::class, 'exportEvents']);
+// Add this route for search by date
+Route::get('/events/search-by-date', [EventController::class, 'searchByDate'])->name('events.searchByDate');
+
+
 
 // --------------------- tasks  Routes --------------------- //
 
@@ -86,9 +94,7 @@ Route::resource('plants', PlantController::class);
 
 
 // Frontend Event View
-Route::get('/events', function () {
-    return view('Events.eventsFront', ['title' => 'Events']);
-})->name('eventsFront');
+
 
 
 
