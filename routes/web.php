@@ -7,12 +7,22 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TaskController;
+
+use \App\Http\Controllers\PlantController;
+
+use \App\Http\Controllers\CategoryController;
+use \App\Http\Controllers\PointsController;
+use \App\Http\Controllers\ItemController;
+
+
+=======
 use App\Http\Controllers\PointsController;
 use App\Http\Controllers\CourseCategoriesController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Product;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -68,10 +78,23 @@ Route::middleware('auth')->group(function () {
     Route::resource('/back/event-categories', EventCategoryController::class);
 });
 
+
+// --------------------- tasks  Routes --------------------- //
+
+Route::resource('tasks', TaskController::class);
+Route::put('/tasks/{id}/update-status', [TaskController::class, 'updateStatus']);
+
+
+// ---------------------  General Routes --------------------- //
+Route::resource('plants', PlantController::class);
+
+
+=======
 // Frontend Event View
 Route::get('/events', function () {
     return view('Events.eventsFront', ['title' => 'Events']);
 })->name('eventsFront');
+
 
 // --------------------- Tasks Routes --------------------- //
 Route::resource('tasks', TaskController::class)->middleware('auth');
